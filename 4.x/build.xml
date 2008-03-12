@@ -3,9 +3,18 @@
     <property name="src.java.dir" value="${src.dir}"/>
     <property name="src.gen.dir" value="src/gen"/>
     <property name="src.wsdl.dir" value="${src.dir}/wsdl"/>
-    
+
+	<!-- Includ custom properties necessary for the build -->
+	<property file="build.properties" />
+	
+	<path id="task-classpath">
+		<fileset dir="${axis.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
     <target name="generate-stubs" depends="clean">
-		<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask"/>
+		<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="task-classpath" />
 		<mkdir dir="${src.gen.dir}"/>
 		<wsdl2java
 			url="${src.wsdl.dir}/asset-operation.wsdl"
