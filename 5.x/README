@@ -1,0 +1,77 @@
+Author: Zach Bailey
+Author: Bradley Wagner
+Version: 0.2
+Version History:
+	- 0.1 Initial Version
+	- 0.2 Updating instructions to use custom property to specify lib locations instead of adding libs manually
+
+Prerequisites: 
+
+This assumes you have Eclipse 3.2+ and Ant 1.7+ installed and configured
+for your development environment, as well as Axis 1.3+ libraries available (axis 1.4 recommended).
+
+Eclipse can be downloaded at: http://download.eclipse.org
+Axis can be downloaded at: http://ws.apache.org/axis/cpp/download.html
+Ant can be downloaded at: http://ant.apache.org/bindownload.cgi
+
+It is recommended you set up your environment in the following manner:
+
+1.) Create a "java" directory. Unzip Ant, Eclipse, and Axis here.
+2.) Add the ant executable to your path. You should be able to type "ant" on the command line
+	and see ant (attempt to) run, something like:
+	C:\>ant
+	Buildfile: build.xml does not exist!
+	Build failed
+	
+3.) Create a "workspace" folder in your java folder. This will be the root of your Eclipse workspace.
+	When you start Eclipse for the first time, tell it to use this folder as the workspace folder. If
+	you are already using Eclipse and have already designated a workspace folder, you can continue using
+	that foloder.
+	
+Next we will bring the project into Eclipse. To do this:
+
+1.) Unzip/move the contents of this zip file to your Eclipse workspace directory.
+2.) Import the project into Eclipse by choosing File -> Import -> General -> Existing Projects into Workspace 
+	and choosing the "Cascade Webservices" folder (this is the root of the project).
+
+After this you should see the Cascade Webservices project show up in your Eclipse window. Do not be alarmed if 
+there are compilation errors, this is because you still need to generate the Java client stubs for interacting 
+with the web services layer.
+
+To do this:
+
+1.) Open the WSDL from your Cascade Server instance by going to: http://<your-cascade-url>/ws/services/AssetOperationService?wsdl
+2.) Save this as a file "asset-operation.wsdl".
+3.) Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
+4.) Copy "default.build.properties" to a file called "build.properties"
+5.) Update the %PATH_TO_AXIS_LIB% for the property "axis.lib.dir" in "build.properties" to be the path of 
+    the "lib" directory for your Axis distribution. This folder should contain files like:
+	- axis.jar
+	- saaj.jar
+	- wsdl4j-1.5.1.jar
+	- axis-ant.jar
+	(etc.)
+6.) Open a command-line/terminal window to run ant. 
+7.) Navigate to to the base directory where the project was unzipped to 
+    (for example, java/workspace/Cascade Webservices) and type the command "ant"
+
+	You should see a successful ant build similar to:
+
+	C:\Java\workspace\Cascade Webservices>ant
+	Buildfile: build.xml
+
+	clean:
+
+	generate-stubs:
+	[wsdl2java] WSDL2Java C:\Java\workspace\Cascade Webservices\src\java\wsdl\asset-
+	operation.wsdl
+
+	BUILD SUCCESSFUL
+	Total time: 1 second
+
+8.) Refresh the project by right clicking on the project and selecting "Refresh".
+
+At this point Eclipse will re-build the project for you. You should not see any red x's
+on any files (which indicate java compilation errors). You should then be able to run the
+"TestRead" application to ensure the local axis webservices infrastructure can communicate with your
+Cascade Server instance.
