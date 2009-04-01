@@ -630,6 +630,7 @@
 			    </complexType>
 
 		   </element>
+
 		
 		
 		<!-- General elements present in operations and results -->
@@ -656,11 +657,31 @@
 
 					      <element maxOccurs="1" name="id" type="xsd:string"/>
 
-					      <element maxOccurs="1" name="path" type="xsd:string"/>
+					      <element maxOccurs="1" name="path" type="impl:path"/>
 
+					
 				     </choice>
 
 				     <element maxOccurs="1" minOccurs="1" name="type" type="impl:entityTypeString"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="path">
+
+			    <sequence>
+
+				     <element maxOccurs="1" name="path" type="xsd:string"/>
+
+				     <choice>
+
+					      <element maxOccurs="1" name="siteId" nillable="true" type="xsd:string"/>
+
+					      <element maxOccurs="1" name="siteName" nillable="true" type="xsd:string"/>
+
+				     </choice>
 
 			    </sequence>
 
@@ -784,10 +805,10 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="searchPages" type="xsd:boolean"/>
 
-				<!-- Whether or not to search stylesheet assets
+				<!-- Whether or not to search format assets
 					 NOT REQUIRED default: false -->
 
-				     <element maxOccurs="1" minOccurs="0" name="searchStylesheets" type="xsd:boolean"/>
+				     <element maxOccurs="1" minOccurs="0" name="searchFormats" type="xsd:boolean"/>
 
 				<!-- Whether or not to search symlink assets
 					 NOT REQUIRED default: false -->
@@ -863,7 +884,7 @@
 				<!-- Filter the audits by a given role.
 					 NOT REQUIRED -->
 
-				     <element maxOccurs="1" minOccurs="0" name="rolename" type="impl:roles"/>
+				     <element maxOccurs="1" minOccurs="0" name="rolename" type="xsd:string"/>
 
 				<!-- Filter the audits by a start time. Only audits for
 					 events that happened after this time will be included.
@@ -1025,6 +1046,10 @@
 
 				     <enumeration value="block"/>
 
+				     <enumeration value="contenttype"/>
+
+				     <enumeration value="contenttypecontainer"/>
+
 				     <enumeration value="destination"/>
 
 				     <enumeration value="file"/>
@@ -1055,11 +1080,19 @@
 
 				     <enumeration value="reference"/>
 
+				     <enumeration value="role"/>
+
 				     <enumeration value="structureddatadefinition"/>
 
 				     <enumeration value="structureddatadefinitioncontainer"/>
 
-				     <enumeration value="stylesheet"/>
+				     <enumeration value="format"/>
+
+				     <enumeration value="format_XSLT"/>
+
+				     <enumeration value="format_SCRIPT"/>
+
+				     <enumeration value="site"/>
 
 				     <enumeration value="symlink"/>
 
@@ -1068,6 +1101,8 @@
 				     <enumeration value="template"/>
 
 				     <enumeration value="transport"/>
+
+				     <enumeration value="transportcontainer"/>
 
 				     <enumeration value="user"/>
 
@@ -1465,16 +1500,15 @@
 
 				     <element maxOccurs="1" minOccurs="1" name="label" type="xsd:string"/>
 
-				<!-- the type of action -->
+				<!-- the type of action: reverse, forward, next-id -->
 
 				     <element maxOccurs="1" minOccurs="1" name="actionType" type="xsd:string"/>
 
-				<!-- The identifier of the step that will result when this action is chosen by the user -->
+				<!-- The id of the step that will result when this action is chosen by the user -->
 
 				     <element maxOccurs="1" minOccurs="1" name="nextId" type="xsd:string"/>
 
-				<!-- For actions in ordered steps, this tells the workflow engine to either
-					 forward to the next step "forward" or to the previous step "reverse" -->
+				<!-- Specifies whether the action is automatic or not -->
 
 				     <element maxOccurs="1" minOccurs="1" name="move" type="xsd:string"/>
 
@@ -1567,6 +1601,17 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="lastModifiedBy" nillable="true" type="xsd:string"/>
 
+						<!-- The Site in which the asset is located 
+							 NOT REQUIRED -->
+	
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteId" nillable="true" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteName" nillable="true" type="xsd:string"/>
+
+						       </choice>
+
 					      </sequence>
 
 				     </extension>
@@ -1611,7 +1656,7 @@
 		   </complexType>
 
 		
-		   <complexType name="stylesheet">
+		   <complexType name="xsltFormat">
 
 			    <complexContent>
 
@@ -1619,10 +1664,32 @@
 
 					      <sequence>
 
-						<!-- The XML content of the stylesheet
+						<!-- The XML content of the xslt format
 							 REQUIRED -->
 
 						       <element maxOccurs="1" minOccurs="1" name="xml" type="xsd:string"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="scriptFormat">
+
+			    <complexContent>
+
+				     <extension base="impl:folder-contained-asset">
+
+					      <sequence>
+
+						<!-- The script content of the scriptFormat
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="script" type="xsd:string"/>
 
 					      </sequence>
 
@@ -1642,24 +1709,25 @@
 					      <sequence>
 
 						<!-- For defining the target relationship 
-							 REQUIRED -->
+							 NOT REQUIRED when template is inside of site
+							 REQUIRED when template is in global area -->
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="1" name="targetId" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="targetId" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="1" name="targetPath" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="targetPath" type="xsd:string"/>
 
 						       </choice>
 
-						<!-- The overall stylesheet applied to this template
+						<!-- The overall xslt format (and ONLY xslt) applied to this template
 							 NOT REQUIRED default none -->
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="0" name="stylesheetId" nillable="true" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatId" nillable="true" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="0" name="stylesheetPath" nillable="true" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatPath" nillable="true" type="xsd:string"/>
 
 						       </choice>
 
@@ -1667,7 +1735,7 @@
 
 						       <element maxOccurs="1" name="xml" type="xsd:string"/>
 
-						<!-- The page regions and their block/stylesheet assignments for this template 
+						<!-- The page regions and their block/xslt format assignments for this template 
 							 NOT REQUIRED default: all regions empty -->
 
 						       <element maxOccurs="1" minOccurs="0" name="pageRegions" type="impl:page-regions"/>
@@ -1711,6 +1779,17 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="path" type="xsd:string"/>
 
+						<!-- The site in which the asset is located 
+							 NOT REQUIRED -->
+						
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteId" nillable="true" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteName" nillable="true" type="xsd:string"/>
+
+						       </choice>
+
 					      </sequence>
 
 				     </extension>
@@ -1723,6 +1802,518 @@
 		<!-- Most of the following concrete types extend containered-asset -->
 
 		<!-- These are all the Administrative area assets -->
+
+		
+		<!-- A role -->
+
+		   <complexType name="role">
+
+			    <complexContent>
+
+				     <extension base="impl:named-asset">
+
+				  	      <sequence>
+
+				        <!-- The type of the role
+				        	 NOT REQUIRED -->
+
+				               <element maxOccurs="1" minOccurs="1" name="roleType" type="impl:role-types"/>
+
+				        <!-- The global or site abilities for the role - use correct one depending on the type of the role
+				        	 REQUIRED -->
+
+				               <choice>
+
+					                <element maxOccurs="1" minOccurs="1" name="globalAbilities" type="impl:global-abilities"/>
+
+					                <element maxOccurs="1" minOccurs="1" name="siteAbilities" type="impl:site-abilities"/>
+
+				               </choice>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		 
+		 <!-- The types of roles. -->
+
+		   <simpleType name="role-types">
+
+			    <restriction base="xsd:string">
+
+				     <enumeration value="site"/>
+
+				     <enumeration value="global"/>
+
+			    </restriction>
+
+		   </simpleType>
+
+		
+		<!-- global role abilities -->
+
+		   <complexType name="global-abilities">
+
+			    <sequence>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="globalAdmin" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassAllPermissionsChecks" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessSiteManagement" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="createSites" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="uploadImagesFromWysiwyg" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectCopy" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectPublish" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectMove" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectDelete" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editPageLevelConfigurations" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editPageContentType" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishReadableHomeAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishWritableHomeAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewPublishQueue" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="reorderPublishQueue" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="cancelPublishJobs" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editAccessRights" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewVersions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="activateDeleteVersions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAudits" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassWorkflow" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="assignApproveWorkflowSteps" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="deleteWorkflows" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="breakLocks" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="assignWorkflowsToFolders" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassAssetFactoryGroupsNewMenu" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassDestinationGroupsWhenPublishing" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassWorkflowDefintionGroupsForFolders" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="alwaysAllowedToToggleDataChecks" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAdminArea" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAssetFactories" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessConfigurationSets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessDataDefinitions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessMetadataSets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessPublishSets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessTargetsDestinations" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessTransports" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessWorkflowDefinitions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessContentTypes" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAllSites" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewSystemInfoAndLogs" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="forceLogout" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="diagnosticTests" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessSecurityArea" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishReadableAdminAreaAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishWritableAdminAreaAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="newSiteWizard" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="integrateFolder" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="importZipArchive" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="optimizeDatabase" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="syncLdap" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bulkChange" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="configureLogging" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchingIndexing" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessConfiguration" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editSystemPreferences" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="siteMigration" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewUsersInMemberGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewAllUsers" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="createUsers" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="deleteUsersInMemberGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="deleteAllUsers" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewMemberGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewAllGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="createGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="deleteMemberGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessRoles" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="createRoles" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="deleteAnyGroup" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editAnyUser" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editUsersInMemberGroups" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editAnyGroup" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editMemberGroups" type="xsd:boolean"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		<!-- site role abilities -->
+
+		   <complexType name="site-abilities">
+
+			    <sequence>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassAllPermissionsChecks" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="uploadImagesFromWysiwyg" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectCopy" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectPublish" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectMove" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="multiSelectDelete" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editPageLevelConfigurations" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editPageContentType" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishReadableHomeAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishWritableHomeAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editAccessRights" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewVersions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="activateDeleteVersions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAudits" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassWorkflow" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="assignApproveWorkflowSteps" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="deleteWorkflows" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="breakLocks" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="assignWorkflowsToFolders" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassAssetFactoryGroupsNewMenu" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassDestinationGroupsWhenPublishing" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bypassWorkflowDefintionGroupsForFolders" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAdminArea" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessAssetFactories" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessConfigurationSets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessDataDefinitions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessMetadataSets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessPublishSets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessDestinations" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessTransports" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessWorkflowDefinitions" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessContentTypes" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishReadableAdminAreaAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="publishWritableAdminAreaAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="integrateFolder" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="importZipArchive" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="bulkChange" type="xsd:boolean"/>
+
+			    </sequence>
+
+		   </complexType>
 
 		
 		<!-- A user -->
@@ -1739,12 +2330,12 @@
 				<!-- the full name of the user 
 					 REQUIRED -->
 
-				     <element maxOccurs="1" minOccurs="1" name="fullName" type="xsd:string"/>
+				     <element maxOccurs="1" minOccurs="0" name="fullName" type="xsd:string"/>
 
 				<!-- the user's email 
 					 REQUIRED -->
 
-				     <element maxOccurs="1" minOccurs="1" name="email" type="xsd:string"/>
+				     <element maxOccurs="1" minOccurs="0" name="email" type="xsd:string"/>
 
 				<!-- the way the user is authenticated 
 					 REQUIRED -->
@@ -1772,10 +2363,14 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="defaultGroup" type="xsd:string"/>
 
-				<!-- This user's highest role
+				<!-- This user's roles
 					 REQUIRED -->
 
-				     <element maxOccurs="1" minOccurs="1" name="role" type="impl:roles"/>
+				     <element maxOccurs="1" minOccurs="1" name="role" type="xsd:string"/>
+
+				<!--  Not required -->
+
+				     <element maxOccurs="1" minOccurs="0" name="entityType" type="impl:entity-type"/>
 
 			    </sequence>
 
@@ -1803,31 +2398,6 @@
 					 for example) -->
 
 				     <enumeration value="custom"/>
-
-			    </restriction>
-
-		   </simpleType>
-
-		
-		<!-- An enumeration of roles in Cascade Server
-			 Roles are cumulative, bottom-up so if a user
-			 is a manager he or she is also a publisher,
-			 approver, and contributor. Thus the need to only
-			 specify one -->
-
-		   <simpleType name="roles">
-
-			    <restriction base="xsd:string">
-
-				     <enumeration value="administrator"/>
-
-				     <enumeration value="manager"/>
-
-				     <enumeration value="publisher"/>
-
-				     <enumeration value="approver"/>
-
-				     <enumeration value="contributor"/>
 
 			    </restriction>
 
@@ -1943,15 +2513,147 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="users" type="xsd:string"/>
 
-				<!-- The highest role for this group. Note that this role will also
-					 apply to all the members, possibly promoting those users -->
+				<!-- The Roles for this group. Note that this role will also
+					 apply to all the members, possibly adding roles for those users -->
 
-				     <element maxOccurs="1" minOccurs="1" name="role" type="impl:roles"/>
+				     <element maxOccurs="1" minOccurs="1" name="role" type="xsd:string"/>
+
+				<!--  Not required -->
+
+				     <element maxOccurs="1" minOccurs="0" name="entityType" type="impl:entity-type"/>
 
 			    </sequence>
 
 		   </complexType>
 
+		
+		   <complexType name="site">
+
+			    <complexContent>
+
+				     <extension base="impl:named-asset">
+
+					      <sequence>
+
+						<!-- The site url REQUIRED-->
+
+						       <element maxOccurs="1" minOccurs="1" name="url" type="xsd:string"/>
+
+						<!-- The default metadata set for the site REQUIRED -->
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="defaultMetadataSetId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="defaultMetadataSetPath" type="xsd:string"/>
+
+						       </choice>
+
+						<!-- File containing css for the site NOT REQUIRED -->
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="cssFileId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="cssFilePath" type="xsd:string"/>
+
+						       </choice>
+
+						       <element maxOccurs="1" minOccurs="0" name="cssClasses" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="roleAssignments" type="impl:role-assignments"/>
+
+						<!-- Whether or not to publish this target on a schedule 
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="usesScheduledPublishing" type="xsd:boolean"/>
+
+						<!-- The base time this target will be published. For example if one wanted
+							 this target to publish at 0100, 0500, 0900, 1300, 1700, 2100, I would enter
+							 one of those times here and set the "publishInterval" to 4, and the
+							 "publishIntervalUnits" to "hours"
+							 NOT REQUIRED default: 00:00 (midnight) -->
+
+						       <element maxOccurs="1" minOccurs="0" name="timeToPublish" type="xsd:time"/>
+
+						<!-- The interval at which this target will be published
+							 NOT REQUIRED default: 1 -->
+
+						       <element maxOccurs="1" minOccurs="0" name="publishInterval" type="xsd:nonNegativeInteger"/>
+
+						<!-- The time unit for publishInterval
+							 NOT REQUIRED default: "hours" -->
+
+						       <element maxOccurs="1" minOccurs="0" name="publishIntervalUnits" type="impl:timeUnits"/>
+
+						
+						<!-- The root folder id and containers idds - used only when reading a site. Unused in other cases
+						     NOT REQUIRED ignored -->
+
+						       <element maxOccurs="1" minOccurs="0" name="rootFolderId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootAssetFactoryContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootPageConfigurationSetContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootContentTypeContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootStructuredDataDefinitionContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootMetadataSetContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootPublishSetContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootSiteDestinationContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootTransportContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootWorkflowDefinitionContainerId" nillable="true" type="xsd:string"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+	
+		
+		   <complexType name="role-assignments">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="roleAssignment" type="impl:role-assignment"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="role-assignment">
+
+			    <sequence>
+
+				     <choice>
+
+					      <element maxOccurs="1" minOccurs="0" name="roleId" type="xsd:string"/>
+
+					      <element maxOccurs="1" minOccurs="0" name="roleName" type="xsd:string"/>
+
+				     </choice>
+
+				<!--  comma delimited list of usernames -->
+
+				     <element maxOccurs="1" minOccurs="0" name="users" type="xsd:string"/>
+
+				<!--  comma delimited list of group names -->
+
+				     <element maxOccurs="1" minOccurs="0" name="groups" type="xsd:string"/>
+
+			    </sequence>
+	
+		   </complexType>
+				
 		
 		   <complexType name="assetFactory">
 
@@ -2081,6 +2783,69 @@
 		   </complexType>
 
 		
+		   <complexType name="contentType">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="1" name="pageConfigurationSetId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="1" name="pageConfigurationSetPath" type="xsd:string"/>
+
+						       </choice>
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="1" name="metadataSetId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="1" name="metadataSetPath" type="xsd:string"/>
+
+						       </choice>
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionPath" type="xsd:string"/>
+
+						       </choice>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="contentTypeContainer">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						<!-- the array of children -->
+
+						       <element maxOccurs="1" minOccurs="0" name="children" nillable="true" type="impl:container-children"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		
 		   <complexType name="pageConfigurationSet">
 
 			    <complexContent>
@@ -2146,14 +2911,14 @@
 
 						       </choice>
 
-						<!-- The overall stylesheet applied to this page configuration
+						<!-- The overall xslt format applied to this page configuration
 							 NOT REQUIRED default none -->
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="0" name="stylesheetId" nillable="true" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatId" nillable="true" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="0" name="stylesheetPath" nillable="true" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatPath" nillable="true" type="xsd:string"/>
 
 						       </choice>
 
@@ -2161,6 +2926,28 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="pageRegions" type="impl:page-regions"/>
 
+						
+						<!-- The output file extension, for example ".html"
+							 Only required when in a site -->
+
+						       <element maxOccurs="1" minOccurs="0" name="outputExtension" nillable="true" type="xsd:string"/>
+
+						<!-- The content type this target serializes its output as
+							 Only required when in a site -->
+
+						       <element maxOccurs="1" minOccurs="0" name="serializationType" nillable="true" type="impl:serialization-type"/>
+
+						<!-- When the serializationType is "XML", should Cascade include the XML
+							 declaration in published files?
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="includeXMLDeclaration" nillable="true" type="xsd:boolean"/>
+
+						<!-- Is this configuration publishable? -->
+
+						       <element maxOccurs="1" minOccurs="0" name="publishable" nillable="true" type="xsd:boolean"/>
+
+						
 					      </sequence>
 
 				     </extension>
@@ -2216,22 +3003,22 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="noBlock" type="xsd:boolean"/>
 
-						<!-- The stylesheet assigned at this page region
+						<!-- The format assigned at this page region, can be either xslt or script
 							 NOT REQUIRED default: empty -->
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="0" name="stylesheetId" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatId" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="0" name="stylesheetPath" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatPath" type="xsd:string"/>
 
 						       </choice>
 
-						<!-- When this is set to true, this will keep a stylesheet defined at a lower
+						<!-- When this is set to true, this will keep a format defined at a lower
 							 level from applying to this region 
 							 NOT REQUIRED default: false -->
 
-						       <element maxOccurs="1" minOccurs="0" name="noStylesheet" type="xsd:boolean"/>
+						       <element maxOccurs="1" minOccurs="0" name="noFormat" type="xsd:boolean"/>
 
 					      </sequence>
 
@@ -2856,6 +3643,16 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="publishIntervalUnits" type="impl:timeUnits"/>
 
+						<!-- The site -->
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteId" nillable="true" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteName" nillable="true" type="xsd:string"/>
+
+						       </choice>
+
 					      </sequence>
 
 				     </extension>
@@ -2865,31 +3662,18 @@
 		   </complexType>
 
 		
-		<!-- Transports have pre-defined containers, so they are not technically
-			 considered containered, but you can still find them by path -->
-
 		   <complexType name="fileSystemTransport">
 
 			    <complexContent>
 
-				     <extension base="impl:named-asset">
+				     <extension base="impl:containered-asset">
 
 					      <sequence>
-
-						<!-- Transports have pre-defined paths. The path of a FileSystemTransport
-							 will be "/Filesystem/" + name -->
-
-						       <element maxOccurs="1" minOccurs="0" name="path" type="xsd:string"/>
 
 						<!-- The directory to output the files to, for example "c:\inetfiles\wwwroot"
 							 REQUIRED -->
 
 						       <element maxOccurs="1" minOccurs="1" name="directory" type="xsd:string"/>
-
-						<!-- When true the content will be output as a ZIP archive
-							 NOT REQUIRED default: false -->
-
-						       <element maxOccurs="1" minOccurs="0" name="outputZip" type="xsd:boolean"/>
 
 					      </sequence>
 
@@ -2904,14 +3688,9 @@
 
 			    <complexContent>
 
-				     <extension base="impl:named-asset">
+				     <extension base="impl:containered-asset">
 
 					      <sequence>
-
-						<!-- Transports have pre-defined paths. The path of a FileSystemTransport
-							 will be "/FTP and SFTP/" + name -->
-
-						       <element maxOccurs="1" minOccurs="0" name="path" type="xsd:string"/>
 
 						<!-- The host name or IP address of the remote server
 							 REQUIRED -->
@@ -2953,6 +3732,27 @@
 
 				     </extension>
 
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="transportContainer">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						<!-- the array of children -->
+
+						       <element maxOccurs="1" minOccurs="0" name="children" nillable="true" type="impl:container-children"/>
+
+					      </sequence>
+
+				     </extension>
+		
 			    </complexContent>
 
 		   </complexType>
@@ -3242,6 +4042,11 @@
 
 					      <sequence>
 
+					    <!-- The type of the index block. It takes "folder" as a default 
+					         NOT REQUIRED default: "folder" -->
+
+					           <element maxOccurs="1" minOccurs="0" name="indexBlockType" type="impl:index-block-type"/>
+
 						<!-- The indexed folder relationship
 							 REQUIRED -->
 
@@ -3250,6 +4055,10 @@
 							        <element maxOccurs="1" minOccurs="1" name="indexedFolderId" type="xsd:string"/>
 
 							        <element maxOccurs="1" minOccurs="1" name="indexedFolderPath" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="1" name="indexedContentTypeId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="1" name="indexedContentTypePath" type="xsd:string"/>
 
 						       </choice>
 
@@ -3351,9 +4160,14 @@
 						       <element maxOccurs="1" minOccurs="0" name="appendCallingPageData" type="xsd:boolean"/>
 
 						<!-- How to sort the folder contents when rendering the XML content
-							 NOT REQUIRED default: "folder-order" -->
+							 NOT REQUIRED default: "folder-order" for folder index blocks and "alphabetical" for content type index blocks -->
 
-						       <element maxOccurs="1" minOccurs="0" name="sortMethod" type="impl:index-block-sort-order"/>
+						       <element maxOccurs="1" minOccurs="0" name="sortMethod" type="impl:index-block-sort-method"/>
+
+						<!-- In what order to sort the assets in the index block
+						     NOT REQUIRED default: "ascending" -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sortOrder" type="impl:index-block-sort-order"/>
 
 					      </sequence>
 
@@ -3366,7 +4180,7 @@
 		
 		<!-- for indexBlock's sortMethod property -->
 
-		   <simpleType name="index-block-sort-order">
+		   <simpleType name="index-block-sort-method">
 
 			    <restriction base="xsd:string">
 
@@ -3383,6 +4197,36 @@
 		   </simpleType>
 
 		
+		<!--  for the indexBlock's indexBlockType property -->
+
+		   <simpleType name="index-block-type">
+
+		      <restriction base="xsd:string">
+
+		           <enumeration value="folder"/>
+
+		           <enumeration value="content-type"/>
+    		      
+		      </restriction>
+
+		   </simpleType>
+
+		
+		<!--  for indexBlock's sortOrder property -->
+
+	      <simpleType name="index-block-sort-order">
+
+              <restriction base="xsd:string">
+
+                   <enumeration value="ascending"/>
+
+                   <enumeration value="descending"/>
+                 
+              </restriction>
+
+           </simpleType>
+
+        
 		<!-- A block which aggregates a URL as an XML feed -->
 
 		   <complexType name="feedBlock">
@@ -3532,7 +4376,7 @@
 
 					      <sequence>
 
-						<!-- For defining the configuration set relationship
+						<!-- For defining the configuration set or content type relationship
 							 REQUIRED -->
 
 						       <choice>
@@ -3540,6 +4384,12 @@
 							        <element maxOccurs="1" minOccurs="1" name="configurationSetId" type="xsd:string"/>
 
 							        <element maxOccurs="1" minOccurs="1" name="configurationSetPath" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="1" name="contentTypeId" type="string">
+
+							        </element>
+
+							        <element maxOccurs="1" minOccurs="1" name="contentTypePath" type="string"/>
 
 						       </choice>
 
@@ -3554,7 +4404,7 @@
 
 						       </choice>
 
-						<!-- The page configurations containing page-level region block/stylesheet assignments
+						<!-- The page configurations containing page-level region block/format assignments
 							 NOT REQUIRED when creating a page, but you must submit assignment information when editing
 							 if you want to maintain the region assignments -->
 
@@ -3580,9 +4430,9 @@
 
 				     <choice>
 
-					      <element maxOccurs="1" minOccurs="1" name="definitionId" type="xsd:string"/>
+					      <element maxOccurs="1" minOccurs="0" name="definitionId" type="xsd:string"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="definitionPath" type="xsd:string"/>
+					      <element maxOccurs="1" minOccurs="0" name="definitionPath" type="xsd:string"/>
 
 				     </choice>
 
@@ -3627,9 +4477,9 @@
 
 				     <choice>
 
-					      <element maxOccurs="1" minOccurs="1" name="text" type="xsd:string"/>
-
 					      <element maxOccurs="1" minOccurs="1" name="structuredDataNodes" type="impl:structured-data-nodes"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="text" type="xsd:string"/>
 
 					      <sequence>
 
@@ -3822,7 +4672,9 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="reference" nillable="true" type="impl:reference"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="stylesheet" nillable="true" type="impl:stylesheet"/>
+					      <element maxOccurs="1" minOccurs="1" name="xsltFormat" nillable="true" type="impl:xsltFormat"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="scriptFormat" nillable="true" type="impl:scriptFormat"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="symlink" nillable="true" type="impl:symlink"/>
 
@@ -3835,9 +4687,15 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="group" nillable="true" type="impl:group"/>
 
+					      <element maxOccurs="1" minOccurs="1" name="role" nillable="true" type="impl:role"/>
+					
 					      <element maxOccurs="1" minOccurs="1" name="assetFactory" nillable="true" type="impl:assetFactory"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="assetFactoryContainer" nillable="true" type="impl:assetFactoryContainer"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="contentType" nillable="true" type="impl:contentType"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="contentTypeContainer" nillable="true" type="impl:contentTypeContainer"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="pageConfigurationSet" nillable="true" type="impl:pageConfigurationSet"/>
 
@@ -3863,9 +4721,15 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="ftpTransport" nillable="true" type="impl:ftpTransport"/>
 
+					      <element maxOccurs="1" minOccurs="1" name="transportContainer" nillable="true" type="impl:transportContainer"/>
+
 					      <element maxOccurs="1" minOccurs="1" name="workflowDefinition" nillable="true" type="impl:workflowDefinition"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="workflowDefinitionContainer" nillable="true" type="impl:workflowDefinitionContainer"/>
+
+					<!-- other assets -->
+
+					      <element maxOccurs="1" minOccurs="1" name="site" nillable="true" type="impl:site"/>
 
 				     </choice>
 
@@ -3900,7 +4764,9 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="reference" nillable="true" type="impl:reference"/>
 
-				     <element maxOccurs="1" minOccurs="0" name="stylesheet" nillable="true" type="impl:stylesheet"/>
+				     <element maxOccurs="1" minOccurs="0" name="xsltFormat" nillable="true" type="impl:xsltFormat"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="scriptFormat" nillable="true" type="impl:scriptFormat"/>
 
 				     <element maxOccurs="1" minOccurs="0" name="symlink" nillable="true" type="impl:symlink"/>
 
@@ -3915,6 +4781,10 @@
 				     <element maxOccurs="1" minOccurs="0" name="assetFactory" nillable="true" type="impl:assetFactory"/>
 
 				     <element maxOccurs="1" minOccurs="0" name="assetFactoryContainer" nillable="true" type="impl:assetFactoryContainer"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="contentType" nillable="true" type="impl:contentType"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="contentTypeContainer" nillable="true" type="impl:contentTypeContainer"/>
 
 				     <element maxOccurs="1" minOccurs="0" name="pageConfigurationSet" nillable="true" type="impl:pageConfigurationSet"/>
 
@@ -3940,9 +4810,15 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="ftpTransport" nillable="true" type="impl:ftpTransport"/>
 
+				     <element maxOccurs="1" minOccurs="0" name="transportContainer" nillable="true" type="impl:transportContainer"/>
+
 				     <element maxOccurs="1" minOccurs="0" name="workflowDefinition" nillable="true" type="impl:workflowDefinition"/>
 
 				     <element maxOccurs="1" minOccurs="0" name="workflowDefinitionContainer" nillable="true" type="impl:workflowDefinitionContainer"/>
+
+				<!-- other assets -->
+
+				     <element maxOccurs="1" minOccurs="0" name="site" nillable="true" type="impl:site"/>
 
 			    </sequence>
 
@@ -4266,6 +5142,7 @@
 
 
     <wsdl:message name="readResponse">
+
 	   
 	     <wsdl:part element="impl:readResponse" name="parameters"/>
 	   
@@ -5009,7 +5886,7 @@
 
         <wsdl:port binding="impl:AssetOperationServiceSoapBinding" name="AssetOperationService">
 
-            <wsdlsoap:address location="http://flex:8680/ws/services/AssetOperationService"/>
+            <wsdlsoap:address location="http://cascadetest.hannonhill.com:4455/ws/services/AssetOperationService"/>
 
         </wsdl:port>
 
