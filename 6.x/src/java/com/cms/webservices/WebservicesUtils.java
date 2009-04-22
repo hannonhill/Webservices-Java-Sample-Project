@@ -539,6 +539,12 @@ public final class WebservicesUtils
         if (site.getDefaultMetadataSetId() != null && !site.getDefaultMetadataSetId().equals(""))
             site.setDefaultMetadataSetPath(null);
 
+        if (site.getSiteAssetFactoryContainerId() != null && !site.getSiteAssetFactoryContainerId().equals(""))
+            site.setSiteAssetFactoryContainerPath(null);
+
+        if (site.getSiteStartingPageId() != null && !site.getSiteStartingPageId().equals(""))
+            site.setSiteStartingPagePath(null);
+
         if (site.getRoleAssignments() != null)
         {
             for (RoleAssignment assignment : site.getRoleAssignments())
