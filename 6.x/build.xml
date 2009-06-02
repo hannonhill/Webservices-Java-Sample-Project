@@ -3,12 +3,14 @@
     <property name="src.java.dir" value="${src.dir}"/>
     <property name="src.gen.dir" value="src/gen"/>
     <property name="src.wsdl.dir" value="${src.dir}/wsdl"/>
+	
+	<property name="lib.dir" value="lib"/>
 
 	<!-- Includ custom properties necessary for the build -->
 	<property file="build.properties" />
 	
 	<path id="task-classpath">
-		<fileset dir="${axis.lib.dir}">
+		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
