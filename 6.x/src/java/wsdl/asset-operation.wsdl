@@ -199,7 +199,7 @@
 
 				     <sequence>
 
-					      <element maxOccurs="unbounded" name="batchReturn" type="impl:operationResult"/>
+					      <element maxOccurs="unbounded" name="batchReturn" type="impl:batchResult"/>
 
 				     </sequence>
 
@@ -673,6 +673,9 @@
 
 			    <sequence>
 
+			<!--  When reading a site, the "path" element should be populated with the
+					site's name -->
+
 				     <element maxOccurs="1" name="path" type="xsd:string"/>
 
 				     <choice>
@@ -1046,6 +1049,22 @@
 
 				     <enumeration value="block"/>
 
+				     <enumeration value="block_FEED"/>
+
+				     <enumeration value="block_INDEX"/>
+
+				     <enumeration value="block_TEXT"/>
+
+				     <enumeration value="block_XHTML"/>
+
+				     <enumeration value="block_XML"/>
+
+				     <enumeration value="connectorcontainer"/>
+
+				     <enumeration value="twitterconnector"/>
+
+				     <enumeration value="wordpressconnector"/>
+
 				     <enumeration value="contenttype"/>
 
 				     <enumeration value="contenttypecontainer"/>
@@ -1094,6 +1113,8 @@
 
 				     <enumeration value="site"/>
 
+				     <enumeration value="sitedestinationcontainer"/>
+
 				     <enumeration value="symlink"/>
 
 				     <enumeration value="target"/>
@@ -1121,6 +1142,33 @@
 		<!-- The base operation result class contains two members, success which
 			 will either be "true" or "false" and a message, which when success is
 			 "false" will contain a descriptive error message of why the operation failed. -->
+
+		
+		   <complexType name="batchResult">
+
+			    <choice>
+
+				     <element maxOccurs="1" minOccurs="1" name="operationResult" type="impl:operationResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="checkOutResult" type="impl:checkOutResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="createResult" type="impl:createResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="listMessagesResult" type="impl:listMessagesResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="readResult" type="impl:readResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="readAccessRightsResult" type="impl:readAccessRightsResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="readAuditsResult" type="impl:readAuditsResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="searchResult" type="impl:searchResult"/>
+				
+				     <element maxOccurs="1" minOccurs="1" name="readWorkflowInformationResult" type="impl:readWorkflowInformationResult"/>
+
+			    </choice>
+
+		   </complexType>
 
 		
 		   <complexType name="operationResult">
@@ -1172,6 +1220,7 @@
 				     </extension>
 
 			    </complexContent>
+
 			
 		   </complexType>
 		
@@ -1365,6 +1414,7 @@
 					      <sequence>
 
 						       <element maxOccurs="1" minOccurs="0" name="workingCopyIdentifier" nillable="true" type="impl:identifier"/>
+
 						
 					      </sequence>
 
@@ -2090,6 +2140,10 @@
 
 				<!-- NOT REQUIRED - default false -->
 
+				     <element maxOccurs="1" minOccurs="0" name="broadcastMessages" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
 				     <element maxOccurs="1" minOccurs="0" name="viewUsersInMemberGroups" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
@@ -2290,6 +2344,10 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="accessContentTypes" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="accessConnectors" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
 
@@ -2559,6 +2617,33 @@
 
 						       </choice>
 
+						<!-- Define the site asset factory container relationship here
+							 This asset factory container will determine which asset factories
+							 show on that user's dashboard under the "My New Content Wizards" section in the site.
+							 NOT REQUIRED default: none -->
+
+					 
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteAssetFactoryContainerId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteAssetFactoryContainerPath" type="xsd:string"/>
+
+						       </choice>
+
+						<!-- Define the site starting page relationship here							 
+							 This starting page will override the global starting page set in
+							 the system preferences 
+							 NOT REQUIRED default: none -->
+
+						       <choice>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteStartingPageId" type="xsd:string"/>
+
+							        <element maxOccurs="1" minOccurs="0" name="siteStartingPagePath" type="xsd:string"/>
+
+						       </choice>
+
 						       <element maxOccurs="1" minOccurs="0" name="cssClasses" type="xsd:string"/>
 
 						       <element maxOccurs="1" minOccurs="0" name="roleAssignments" type="impl:role-assignments"/>
@@ -2597,6 +2682,8 @@
 						       <element maxOccurs="1" minOccurs="0" name="rootPageConfigurationSetContainerId" nillable="true" type="xsd:string"/>
 
 						       <element maxOccurs="1" minOccurs="0" name="rootContentTypeContainerId" nillable="true" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="rootConnectorContainerId" nillable="true" type="xsd:string"/>
 
 						       <element maxOccurs="1" minOccurs="0" name="rootStructuredDataDefinitionContainerId" nillable="true" type="xsd:string"/>
 
@@ -2731,11 +2818,77 @@
 
 						       </choice>
 
+						<!-- An array of asset factory plugins assigned to the asset factory
+							 NOT REQUIRED default: empty -->
+
+						       <element maxOccurs="1" minOccurs="0" name="plugins" type="impl:asset-factory-plugins"/>
+
 					      </sequence>
 
 				     </extension>
 
 			    </complexContent>
+
+		   </complexType>
+
+		
+		<!-- complex type wrapping a list of asset factory plugins -->
+
+		   <complexType name="asset-factory-plugins">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="plugin" type="impl:asset-factory-plugin"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="asset-factory-plugin">
+
+			    <sequence>
+
+			    <!-- Name of the asset factory plugin - this is the exact class, like "com.cms.assetfactory.DisplayToSystemNamePlugin"
+			         REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="parameters" type="impl:asset-factory-plugin-parameters"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		<!-- complex type wrapping a list of asset factory plugin parameters -->
+
+		   <complexType name="asset-factory-plugin-parameters">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="parameter" type="impl:asset-factory-plugin-parameter"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="asset-factory-plugin-parameter">
+
+			    <sequence>
+
+				<!-- Parameter name (not label), for example "assetfactory.plugin.filelimit.param.name.size"
+					 REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
+
+				<!-- Parameter value 
+					 NOT REQUIRED default: empty string -->
+
+				     <element maxOccurs="1" minOccurs="0" name="value" type="xsd:string"/>
+
+			    </sequence>
 
 		   </complexType>
 
@@ -3431,6 +3584,27 @@
 		   </complexType>
 
 		
+		   <complexType name="siteDestinationContainer">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						<!-- the array of children -->
+
+						       <element maxOccurs="1" minOccurs="0" name="children" nillable="true" type="impl:container-children"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+					
+		
 		   <complexType name="target">
 
 			    <complexContent>
@@ -3577,13 +3751,16 @@
 					      <sequence>
 
 						<!-- For defining the parent target relationship
-							 REQUIRED -->
+							 REQUIRED
+							 When inside a Site, this field must refer to a SiteDestinationContainer.
+							 When not in a Site, this field must refer to a Target
+							  -->
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="1" name="parentTargetId" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="1" name="parentContainerId" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="1" name="parentTargetPath" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="1" name="parentContainerPath" type="xsd:string"/>
 
 						       </choice>
 
@@ -3737,6 +3914,58 @@
 		   </complexType>
 
 		
+		   <complexType name="databaseTransport">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						<!-- The site id
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="transportSiteId" type="xsd:positiveInteger"/>
+
+						
+						<!-- The name of the database server
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="serverName" type="xsd:string"/>
+
+						
+						<!-- The port on which of the database server is working
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="serverPort" type="xsd:positiveInteger"/>
+
+						
+						<!-- The name of the database itself
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="databaseName" type="xsd:string"/>
+
+						
+						<!-- The username fto user when connecting to the server
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="username" type="xsd:string"/>
+
+						
+						<!-- The password to use when connecting to the server
+							 NOT REQUIRED default: empty string -->
+
+						       <element maxOccurs="1" minOccurs="0" name="password" type="xsd:string"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
 		   <complexType name="transportContainer">
 
 			    <complexContent>
@@ -3754,6 +3983,228 @@
 				     </extension>
 		
 			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="connectorContainer">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						<!-- the array of children -->
+
+						       <element maxOccurs="1" minOccurs="0" name="children" nillable="true" type="impl:container-children"/>
+
+					      </sequence>
+
+				     </extension>
+		
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="connector">
+
+			    <complexContent>
+
+				     <extension base="impl:containered-asset">
+
+					      <sequence>
+
+						<!-- First authentication token for the external application the connector connects to (usually a username or email address)
+							 NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="auth1" nillable="true" type="xsd:string"/>
+
+						<!-- Second authentication token for the external application the connector connects to (usually a password)
+							 Write only - hidden when read
+							 NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="auth2" nillable="true" type="xsd:string"/>
+
+						<!-- URL of the external application the connector connects to
+							 NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="url" nillable="true" type="xsd:string"/>
+
+						<!-- Determins whether or not the connector has been verified
+							 Read only - editing a connector always unverifies it
+							 NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="verified" type="xsd:boolean"/>
+
+						<!-- The date this conenctor was verified
+						     Read only - editing a connector always clears the verification date
+							 NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="verifiedDate" nillable="true" type="xsd:dateTime"/>
+
+						<!-- A list of connector parameters
+							 NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="connectorParameters" type="impl:connector-parameter-list"/>
+
+						<!-- A list of connector parameters
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="connectorContentTypeLinks" type="impl:connector-content-type-link-list"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="wordPressConnector">
+
+			    <complexContent>
+
+				     <extension base="impl:connector"/>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="twitterConnector">
+
+			    <complexContent>
+
+				     <extension base="impl:connector">
+
+					      <sequence>
+
+					<!-- The destination
+						 REQUIRED -->
+
+					       <choice>
+
+						        <element maxOccurs="1" minOccurs="1" name="destinationId" type="xsd:string"/>
+
+						        <element maxOccurs="1" minOccurs="1" name="destinationPath" type="xsd:string"/>
+
+					       </choice>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="connector-parameter-list">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="connectorParameter" nillable="true" type="impl:connector-parameter"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="connector-parameter">
+
+			    <sequence>
+
+				<!-- Name of the parameter
+					 REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="name" nillable="true" type="xsd:string"/>
+
+				<!-- Value of the parameter
+					 REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="value" nillable="true" type="xsd:string"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="connector-content-type-link-list">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="connectorContentTypeLink" nillable="true" type="impl:connector-content-type-link"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="connector-content-type-link">
+
+			    <sequence>
+
+				<!-- The content type
+					 REQUIRED -->
+
+				     <choice>
+
+					      <element maxOccurs="1" minOccurs="1" name="contentTypeId" type="xsd:string"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="contentTypePath" type="xsd:string"/>
+
+				     </choice>
+
+				<!-- The page configuration
+					 NOT REQUIRED -->
+
+				     <choice>
+
+					      <element maxOccurs="1" minOccurs="0" name="pageConfigurationId" type="xsd:string"/>
+
+					      <element maxOccurs="1" minOccurs="0" name="pageConfigurationName" type="xsd:string"/>
+
+				     </choice>
+
+				<!-- A list of connector content type link params
+					 NOT REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="0" name="connectorContentTypeLinkParams" type="impl:connector-content-type-link-param-list"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="connector-content-type-link-param-list">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="connectorContentTypeLinkParam" nillable="true" type="impl:connector-content-type-link-param"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="connector-content-type-link-param">
+
+			    <sequence>
+
+				<!-- Name of the parameter
+					 REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="name" nillable="true" type="xsd:string"/>
+
+				<!-- Value of the parameter
+					 REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="value" nillable="true" type="xsd:string"/>
+
+			    </sequence>
 
 		   </complexType>
 
@@ -4221,6 +4672,7 @@
                    <enumeration value="ascending"/>
 
                    <enumeration value="descending"/>
+
                  
               </restriction>
 
@@ -4697,6 +5149,12 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="contentTypeContainer" nillable="true" type="impl:contentTypeContainer"/>
 
+					      <element maxOccurs="1" minOccurs="1" name="connectorContainer" nillable="true" type="impl:connectorContainer"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="twitterConnector" nillable="true" type="impl:twitterConnector"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="wordPressConnector" nillable="true" type="impl:wordPressConnector"/>
+
 					      <element maxOccurs="1" minOccurs="1" name="pageConfigurationSet" nillable="true" type="impl:pageConfigurationSet"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="pageConfigurationSetContainer" nillable="true" type="impl:pageConfigurationSetContainer"/>
@@ -4715,11 +5173,15 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="target" nillable="true" type="impl:target"/>
 
+					      <element maxOccurs="1" minOccurs="1" name="siteDestinationContainer" nillable="true" type="impl:siteDestinationContainer"/>
+
 					      <element maxOccurs="1" minOccurs="1" name="destination" nillable="true" type="impl:destination"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="fileSystemTransport" nillable="true" type="impl:fileSystemTransport"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="ftpTransport" nillable="true" type="impl:ftpTransport"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="databaseTransport" nillable="true" type="impl:databaseTransport"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="transportContainer" nillable="true" type="impl:transportContainer"/>
 
@@ -4737,94 +5199,7 @@
 
 		   </complexType>
 
-		
-		<!-- asset-read is similar to asset, except that it is what is returned on a read. It includes all
-			 possible Cascade Server assets, and the element that is non-nil corresponds to the asset type
-			 that is being read -->
 
-		   <complexType name="asset-read">
-
-			    <sequence>
-
-				     <element maxOccurs="1" minOccurs="0" name="feedBlock" nillable="true" type="impl:feedBlock"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="indexBlock" nillable="true" type="impl:indexBlock"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="textBlock" nillable="true" type="impl:textBlock"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="xhtmlBlock" nillable="true" type="impl:xhtmlBlock"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="xmlBlock" nillable="true" type="impl:xmlBlock"/>
-					
-				     <element maxOccurs="1" minOccurs="0" name="file" nillable="true" type="impl:file"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="folder" nillable="true" type="impl:folder"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="page" nillable="true" type="impl:page"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="reference" nillable="true" type="impl:reference"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="xsltFormat" nillable="true" type="impl:xsltFormat"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="scriptFormat" nillable="true" type="impl:scriptFormat"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="symlink" nillable="true" type="impl:symlink"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="template" nillable="true" type="impl:template"/>
-
-				<!-- admin area assets (must be manager or higher to read -->
-
-				     <element maxOccurs="1" minOccurs="0" name="user" nillable="true" type="impl:user"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="group" nillable="true" type="impl:group"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="assetFactory" nillable="true" type="impl:assetFactory"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="assetFactoryContainer" nillable="true" type="impl:assetFactoryContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="contentType" nillable="true" type="impl:contentType"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="contentTypeContainer" nillable="true" type="impl:contentTypeContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="pageConfigurationSet" nillable="true" type="impl:pageConfigurationSet"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="pageConfigurationSetContainer" nillable="true" type="impl:pageConfigurationSetContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="structuredDataDefinition" nillable="true" type="impl:structuredDataDefinition"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionContainer" nillable="true" type="impl:structuredDataDefinitionContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="metadataSet" nillable="true" type="impl:metadataSet"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="metadataSetContainer" nillable="true" type="impl:metadataSetContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="publishSet" nillable="true" type="impl:publishSet"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="publishSetContainer" nillable="true" type="impl:publishSetContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="target" nillable="true" type="impl:target"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="destination" nillable="true" type="impl:destination"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="fileSystemTransport" nillable="true" type="impl:fileSystemTransport"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="ftpTransport" nillable="true" type="impl:ftpTransport"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="transportContainer" nillable="true" type="impl:transportContainer"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="workflowDefinition" nillable="true" type="impl:workflowDefinition"/>
-
-				     <element maxOccurs="1" minOccurs="0" name="workflowDefinitionContainer" nillable="true" type="impl:workflowDefinitionContainer"/>
-
-				<!-- other assets -->
-
-				     <element maxOccurs="1" minOccurs="0" name="site" nillable="true" type="impl:site"/>
-
-			    </sequence>
-
-		   </complexType>
-
-		
 		<!-- For configuring workflow -->
 
 		
@@ -5137,12 +5512,12 @@
     <wsdl:message name="readRequest">
 	   
 	     <wsdl:part element="impl:read" name="parameters"/>
+
 	   
     </wsdl:message>
 
 
     <wsdl:message name="readResponse">
-
 	   
 	     <wsdl:part element="impl:readResponse" name="parameters"/>
 	   
@@ -5507,7 +5882,6 @@
 	    </wsdl:operation>
 		
     </wsdl:portType>
-
 
    <!-- Bind the AssetOperationServiceHandler -->
 
@@ -5886,7 +6260,7 @@
 
         <wsdl:port binding="impl:AssetOperationServiceSoapBinding" name="AssetOperationService">
 
-            <wsdlsoap:address location="http://cascadetest.hannonhill.com:4455/ws/services/AssetOperationService"/>
+            <wsdlsoap:address location="http://localhost:8080/ws/services/AssetOperationService"/>
 
         </wsdl:port>
 

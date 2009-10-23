@@ -18,6 +18,8 @@ package com.cms.webservices;
 
 import com.hannonhill.www.ws.ns.AssetOperationService.AssetFactory;
 import com.hannonhill.www.ws.ns.AssetOperationService.BaseAsset;
+import com.hannonhill.www.ws.ns.AssetOperationService.Connector;
+import com.hannonhill.www.ws.ns.AssetOperationService.ConnectorContentTypeLink;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContaineredAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.DublinAwareAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.ExpiringAsset;
@@ -47,7 +49,9 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Symlink;
 import com.hannonhill.www.ws.ns.AssetOperationService.Template;
 import com.hannonhill.www.ws.ns.AssetOperationService.TextBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.TransportContainer;
+import com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector;
 import com.hannonhill.www.ws.ns.AssetOperationService.User;
+import com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector;
 import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.XsltFormat;
@@ -571,7 +575,7 @@ public final class WebservicesUtils
      * Nulls out all the un-required 
      * @param ms
      */
-    public static final void nullMetadataValues(MetadataSet ms)
+    public static final void nullMetadataSetValues(MetadataSet ms)
     {
         nullAssetValues(ms);
         nullContaineredValues(ms);
@@ -625,5 +629,40 @@ public final class WebservicesUtils
             return null;
 
         return site.getId();
+    }
+
+    private static final void nullConnectorValues(Connector c)
+    {
+        nullContaineredValues(c);
+        ConnectorContentTypeLink[] links = c.getConnectorContentTypeLinks();
+        for (ConnectorContentTypeLink link : links)
+        {
+            if (link.getContentTypeId() != null && !link.getContentTypeId().equals(""))
+                link.setContentTypePath(null);
+            if (link.getPageConfigurationId() != null && !link.getPageConfigurationId().equals(""))
+                link.setPageConfigurationName(null);
+        }
+    }
+
+    /**
+     * Nulls out unneeded values from a TwitterConnector.
+     * 
+     * @param tc
+     */
+    public static final void nullTwitterConnectorValues(TwitterConnector tc)
+    {
+        nullConnectorValues(tc);
+        if (tc.getDestinationId() != null && !tc.getDestinationId().equals(""))
+            tc.setDestinationPath(null);
+    }
+
+    /**
+     * Nulls out unneeded values from a WordPressConnector.
+     * 
+     * @param wpc
+     */
+    public static final void nullWordPressConnectorValues(WordPressConnector wpc)
+    {
+        nullConnectorValues(wpc);
     }
 }
