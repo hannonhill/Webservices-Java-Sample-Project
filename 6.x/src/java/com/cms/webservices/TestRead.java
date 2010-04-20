@@ -53,7 +53,7 @@ public class TestRead
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setPassword("asdfasdfasdf");
+        authentication.setPassword("admin");
         authentication.setUsername("admin");
 
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
