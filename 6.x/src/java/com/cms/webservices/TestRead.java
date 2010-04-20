@@ -24,7 +24,6 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 import com.hannonhill.www.ws.ns.AssetOperationService.Read;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 
-
 /**
  * Tests the webservices framework by doing a read of the ROOT folder.
  * 
@@ -54,12 +53,13 @@ public class TestRead
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setPassword("admin");
+        authentication.setPassword("asdfasdfasdf");
         authentication.setUsername("admin");
 
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
         AssetOperationHandler handler = serviceLocator.getAssetOperationService();
         ReadResult result = handler.read(authentication, toRead);
         System.out.println("Got read result: " + result);
+        System.out.println("Read was " + (result.getSuccess().equals("true") ? "successful." : "unsuccessful. Error is: " + result.getMessage()));
     }
 }
