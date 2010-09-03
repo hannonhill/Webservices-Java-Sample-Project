@@ -7,16 +7,15 @@ Version History:
 
 Prerequisites: 
 
-This assumes you have Eclipse 3.2+ and Ant 1.7+ installed and configured
-for your development environment, as well as Axis 1.3+ libraries available (axis 1.4 recommended).
+This assumes you have Eclipse 3.4+ and Ant 1.7+ installed and configured
+for your development environment, as well as the included Axis libraries.
 
 Eclipse can be downloaded at: http://download.eclipse.org
-Axis can be downloaded at: http://ws.apache.org/axis/cpp/download.html
-Ant can be downloaded at: http://ant.apache.org/bindownload.cgi
+Ant can be downloaded at: http://ant.apache.org/
 
 It is recommended you set up your environment in the following manner:
 
-1.) Create a "java" directory. Unzip Ant, Eclipse, and Axis here.
+1.) Create a "java" directory. Unzip Ant, Eclipse into it.
 2.) Add the ant executable to your path. You should be able to type "ant" on the command line
 	and see ant (attempt to) run, something like:
 	C:\>ant
@@ -43,16 +42,8 @@ To do this:
 1.) Open the WSDL from your Cascade Server instance by going to: http://<your-cascade-url>/ws/services/AssetOperationService?wsdl
 2.) Save this as a file "asset-operation.wsdl".
 3.) Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
-4.) Copy "default.build.properties" to a file called "build.properties"
-5.) Update the %PATH_TO_AXIS_LIB% for the property "axis.lib.dir" in "build.properties" to be the path of 
-    the "lib" directory for your Axis distribution. This folder should contain files like:
-	- axis.jar
-	- saaj.jar
-	- wsdl4j-1.5.1.jar
-	- axis-ant.jar
-	(etc.)
-6.) Open a command-line/terminal window to run ant. 
-7.) Navigate to to the base directory where the project was unzipped to 
+4.) Open a command-line/terminal window to run ant. 
+5.) Navigate to to the base directory where the project was unzipped to 
     (for example, java/workspace/Cascade Webservices) and type the command "ant"
 
 	You should see a successful ant build similar to:
@@ -69,9 +60,10 @@ To do this:
 	BUILD SUCCESSFUL
 	Total time: 1 second
 
-8.) Refresh the project by right clicking on the project and selecting "Refresh".
+6.) Refresh the project by right clicking on the project and selecting "Refresh".
 
 At this point Eclipse will re-build the project for you. You should not see any red x's
 on any files (which indicate java compilation errors). You should then be able to run the
 "TestRead" application to ensure the local axis webservices infrastructure can communicate with your
-Cascade Server instance.
+Cascade Server instance. Remember, that your Cascade instance must be running for the Web Service
+to execute.
