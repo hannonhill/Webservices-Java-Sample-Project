@@ -52,7 +52,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.TransportContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector;
 import com.hannonhill.www.ws.ns.AssetOperationService.User;
 import com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector;
-import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlBlock;
+import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.XsltFormat;
 
@@ -496,7 +496,7 @@ public final class WebservicesUtils
      * 
      * @param xhtmlBlock
      */
-    public static final void nullXhtmlBlockValues(XhtmlBlock xhtmlBlock)
+    public static final void nullXhtmlBlockValues(XhtmlDataDefinitionBlock xhtmlBlock)
     {
         nullExpiringValues(xhtmlBlock);
     }

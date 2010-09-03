@@ -129,6 +129,50 @@
 		   </element>
 
 		
+		<!-- Used to move/rename an asset -->
+
+		   <element name="move">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+
+					<!--  REQUIRED: identifier of the asset being moved -->
+
+					      <element maxOccurs="1" minOccurs="1" name="identifier" nillable="false" type="impl:identifier"/>
+
+					<!--  REQUIRED: parameters specifying a new name and/or container for the asset -->
+
+					      <element maxOccurs="1" minOccurs="1" name="moveParameters" nillable="false" type="impl:moveParameters"/>
+
+					<!--  NOT REQUIRED: workflow configuration to be used when moving -->
+
+					      <element maxOccurs="1" minOccurs="0" name="workflowConfiguration" nillable="false" type="impl:workflow-configuration"/>
+
+				     </sequence>
+			
+			    </complexType>
+	
+		   </element>
+
+		
+		   <element name="moveResponse">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="moveReturn" type="impl:operationResult"/>
+				
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
 		   <element name="editResponse">
 
 			    <complexType>
@@ -630,7 +674,6 @@
 			    </complexType>
 
 		   </element>
-
 		
 		
 		<!-- General elements present in operations and results -->
@@ -655,14 +698,22 @@
 
 				     <choice>
 
+					<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 in case if the selected asset gets restored from the recycle bin. -->
+
 					      <element maxOccurs="1" name="id" type="xsd:string"/>
 
-					      <element maxOccurs="1" name="path" type="impl:path"/>
+					<!-- Path works only for non-recycled assets -->
 
+					      <element maxOccurs="1" name="path" type="impl:path"/>
 					
 				     </choice>
 
 				     <element maxOccurs="1" minOccurs="1" name="type" type="impl:entityTypeString"/>
+
+				<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycled" type="xsd:boolean"/>
 
 			    </sequence>
 
@@ -862,6 +913,29 @@
 		   </complexType>
 
 		
+		<!-- Parameters used when moving an asset -->
+
+		   <complexType name="moveParameters">
+
+			    <sequence>
+
+				<!--  NOT REQUIRED: the container into which the asset will be moved
+					  if left empty, asset will remain in its current container -->
+
+				     <element maxOccurs="1" minOccurs="0" name="destinationContainerIdentifier" type="impl:identifier"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="doWorkflow" nillable="false" type="xsd:boolean"/>
+
+				<!--  NOT REQUIRED: name to give the asset
+					  if left empty asset's name will not be changed  -->
+
+				     <element maxOccurs="1" minOccurs="0" name="newName" type="xsd:string"/>
+			
+			    </sequence>
+
+		   </complexType>
+
+		
 		<!-- Parameters when getting the audits from the system -->
 
 		   <complexType name="auditParameters">
@@ -949,6 +1023,12 @@
 				     <enumeration value="publish"/>
 
 				     <enumeration value="unpublish"/>
+
+				     <enumeration value="recycle"/>
+
+				     <enumeration value="restore"/>
+
+				     <enumeration value="move"/>
 
 			    </restriction>
 
@@ -1055,7 +1135,7 @@
 
 				     <enumeration value="block_TEXT"/>
 
-				     <enumeration value="block_XHTML"/>
+				     <enumeration value="block_XHTML_DATADEFINITION"/>
 
 				     <enumeration value="block_XML"/>
 
@@ -1101,9 +1181,9 @@
 
 				     <enumeration value="role"/>
 
-				     <enumeration value="structureddatadefinition"/>
+				     <enumeration value="datadefinition"/>
 
-				     <enumeration value="structureddatadefinitioncontainer"/>
+				     <enumeration value="datadefinitioncontainer"/>
 
 				     <enumeration value="format"/>
 
@@ -1220,7 +1300,6 @@
 				     </extension>
 
 			    </complexContent>
-
 			
 		   </complexType>
 		
@@ -1414,7 +1493,6 @@
 					      <sequence>
 
 						       <element maxOccurs="1" minOccurs="0" name="workingCopyIdentifier" nillable="true" type="impl:identifier"/>
-
 						
 					      </sequence>
 
@@ -1602,7 +1680,7 @@
 					      <sequence>
 
 						<!-- The name of the asset
-							 REQUIRED -->
+							 REQUIRED on create, ignored on edit.  User move operation to rename an asset.-->
 
 						       <element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
 
@@ -1625,7 +1703,8 @@
 
 					      <sequence>
 
-						<!-- The parent folder relationship. Change this to move an asset -->
+						<!-- The parent folder relationship. REQUIRED on create, ignored on edit.  Use move
+							operation to change parent folder after an asset has been created -->
 
 						       <choice>
 
@@ -1775,11 +1854,20 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="formatId" nillable="true" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="formatPath" nillable="true" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="formatRecycled" nillable="true" type="xsd:boolean"/>
 
 						<!-- The XHTML content of the template -->
 
@@ -1813,7 +1901,7 @@
 					      <sequence>
 
 						<!-- For defining the container relationship 
-							 REQUIRED -->
+							 REQUIRED on create, ignored on edit.  Use move operation to move an asset after it has been created -->
 
 						       <choice>
 
@@ -1912,10 +2000,6 @@
 
 				<!-- NOT REQUIRED - default false -->
 
-				     <element maxOccurs="1" minOccurs="0" name="globalAdmin" type="xsd:boolean"/>
-
-				<!-- NOT REQUIRED - default false -->
-
 				     <element maxOccurs="1" minOccurs="0" name="bypassAllPermissionsChecks" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
@@ -1953,6 +2037,10 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="editPageContentType" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editDataDefinition" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
 
@@ -2144,6 +2232,18 @@
 
 				<!-- NOT REQUIRED - default false -->
 
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinViewRestoreUserAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinDeleteAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinViewRestoreAllAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
 				     <element maxOccurs="1" minOccurs="0" name="viewUsersInMemberGroups" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
@@ -2206,6 +2306,10 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="editMemberGroups" type="xsd:boolean"/>
 
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="moveRenameAssets" type="xsd:boolean"/>
+				
 			    </sequence>
 
 		   </complexType>
@@ -2248,6 +2352,10 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="editPageContentType" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="editDataDefinition" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
 
@@ -2369,6 +2477,22 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="bulkChange" type="xsd:boolean"/>
 
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinViewRestoreUserAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinDeleteAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinViewRestoreAllAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="moveRenameAssets" type="xsd:boolean"/>
+
 			    </sequence>
 
 		   </complexType>
@@ -2430,6 +2554,13 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="entityType" type="impl:entity-type"/>
 
+				<!--  Default Site for the user, defaultSiteId takes precedence if both fields are set
+					NOT REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="0" name="defaultSiteId" nillable="true" type="xsd:string"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="defaultSiteName" nillable="true" type="xsd:string"/>
+
 			    </sequence>
 
 		   </complexType>
@@ -2481,11 +2612,20 @@
 
 				     <choice>
 
+					<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 in case if the selected asset gets restored from the recycle bin. -->
+				
 					      <element maxOccurs="1" minOccurs="0" name="groupStartingPageId" type="xsd:string"/>
+
+					<!-- Path works only for non-recycled assets -->
 
 					      <element maxOccurs="1" minOccurs="0" name="groupStartingPagePath" type="xsd:string"/>
 
 				     </choice>
+
+				<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+				     <element maxOccurs="1" minOccurs="0" name="groupStartingPageRecycled" type="xsd:boolean"/>
 
 				<!-- Define the group base folder relationship here
 					 For all users for which this group is that user's default group,
@@ -2497,11 +2637,20 @@
 
 				     <choice>
 
+					<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 in case if the selected asset gets restored from the recycle bin. -->
+
 					      <element maxOccurs="1" minOccurs="0" name="groupBaseFolderId" type="xsd:string"/>
+
+					<!-- Path works only for non-recycled assets -->
 
 					      <element maxOccurs="1" minOccurs="0" name="groupBaseFolderPath" type="xsd:string"/>
 
 				     </choice>
+
+				<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+				     <element maxOccurs="1" minOccurs="0" name="groupBaseFolderRecycled" type="xsd:boolean"/>
 
 				<!-- Define the group asset factory container relationship here
 					 For all users for which this group is that user's default group,
@@ -2611,17 +2760,25 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="cssFileId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="cssFilePath" type="xsd:string"/>
 
 						       </choice>
 
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="cssFileRecycled" type="xsd:boolean"/>
+
 						<!-- Define the site asset factory container relationship here
 							 This asset factory container will determine which asset factories
 							 show on that user's dashboard under the "My New Content Wizards" section in the site.
 							 NOT REQUIRED default: none -->
-
 					 
 						       <choice>
 
@@ -2638,11 +2795,20 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="siteStartingPageId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="siteStartingPagePath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="siteStartingPageRecycled" type="xsd:boolean"/>
 
 						       <element maxOccurs="1" minOccurs="0" name="cssClasses" type="xsd:string"/>
 
@@ -2671,6 +2837,10 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="publishIntervalUnits" type="impl:timeUnits"/>
 
+						<!-- REQUIRED The recycle bin expiration time -->
+
+						       <element maxOccurs="1" minOccurs="1" name="recycleBinExpiration" type="impl:recycleBinExpiration"/>
+ 
 						
 						<!-- The root folder id and containers idds - used only when reading a site. Unused in other cases
 						     NOT REQUIRED ignored -->
@@ -2685,7 +2855,7 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="rootConnectorContainerId" nillable="true" type="xsd:string"/>
 
-						       <element maxOccurs="1" minOccurs="0" name="rootStructuredDataDefinitionContainerId" nillable="true" type="xsd:string"/>
+						       <element maxOccurs="1" minOccurs="0" name="rootDataDefinitionContainerId" nillable="true" type="xsd:string"/>
 
 						       <element maxOccurs="1" minOccurs="0" name="rootMetadataSetContainerId" nillable="true" type="xsd:string"/>
 
@@ -2704,7 +2874,24 @@
 			    </complexContent>
 
 		   </complexType>
-	
+
+		
+		   <simpleType name="recycleBinExpiration">
+
+			    <restriction base="xsd:string">
+
+				     <enumeration value="1"/>
+
+				     <enumeration value="15"/>
+
+				     <enumeration value="30"/>
+
+				     <enumeration value="never"/>
+
+			    </restriction>
+
+		   </simpleType>
+
 		
 		   <complexType name="role-assignments">
 
@@ -2767,22 +2954,40 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="baseAssetId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="baseAssetPath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="baseAssetRecycled" type="xsd:boolean"/>
 
 						<!-- where assets created from this factory must be placed if specified
 							 NOT REQUIRED default: none -->
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="placementFolderId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="placementFolderPath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="placementFolderRecycled" type="xsd:boolean"/>
 
 						<!-- when the placement folder is specified, this allows assets to be placed
 							 in subfolders of that folder as well
@@ -2962,9 +3167,9 @@
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionId" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="dataDefinitionId" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionPath" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="dataDefinitionPath" type="xsd:string"/>
 
 						       </choice>
 
@@ -3069,11 +3274,20 @@
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="0" name="formatId" nillable="true" type="xsd:string"/>
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
 
-							        <element maxOccurs="1" minOccurs="0" name="formatPath" nillable="true" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="formatId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
+
+							        <element maxOccurs="1" minOccurs="0" name="formatPath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="formatRecycled" type="xsd:boolean"/>
 
 						<!-- The individual page region assignments for this configuration -->
 
@@ -3144,11 +3358,20 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="blockId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="blockPath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="blockRecycled" type="xsd:boolean"/>
 
 						<!-- When this is set to true, this will keep a block defined at a lower
 							 level from applying to this region 
@@ -3161,11 +3384,20 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="formatId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="formatPath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="formatRecycled" type="xsd:boolean"/>
 
 						<!-- When this is set to true, this will keep a format defined at a lower
 							 level from applying to this region 
@@ -3203,7 +3435,7 @@
 		   </complexType>
 
 		
-		   <complexType name="structuredDataDefinition">
+		   <complexType name="dataDefinition">
 
 			    <complexContent>
 
@@ -3225,7 +3457,7 @@
 		   </complexType>
 
 		
-		   <complexType name="structuredDataDefinitionContainer">
+		   <complexType name="dataDefinitionContainer">
 
 			    <complexContent>
 
@@ -3656,11 +3888,20 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="0" name="cssFileId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="0" name="cssFilePath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="cssFileRecycled" type="xsd:boolean"/>
 
 						<!-- The content type this target serializes its output as
 							 REQUIRED -->
@@ -4426,13 +4667,26 @@
 					<!-- For defining the expiration folder relationship
 						 NOT REQUIRED default: none -->
 
-					      <choice>
+					      <sequence>
 
-						       <element maxOccurs="1" minOccurs="0" name="expirationFolderId" type="xsd:string"/>
+						       <choice>
 
-						       <element maxOccurs="1" minOccurs="0" name="expirationFolderPath" type="xsd:string"/>
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
 
-					      </choice>
+							        <element maxOccurs="1" minOccurs="0" name="expirationFolderId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
+
+							        <element maxOccurs="1" minOccurs="0" name="expirationFolderPath" type="xsd:string"/>
+
+						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="expirationFolderRecycled" type="xsd:boolean"/>
+
+					      </sequence>
 
 				     </extension>
 
@@ -4503,7 +4757,12 @@
 
 						       <choice>
 
+							<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 		 in case if the selected asset gets restored from the recycle bin. -->
+
 							        <element maxOccurs="1" minOccurs="1" name="indexedFolderId" type="xsd:string"/>
+
+							<!-- Path works only for non-recycled assets -->
 
 							        <element maxOccurs="1" minOccurs="1" name="indexedFolderPath" type="xsd:string"/>
 
@@ -4512,6 +4771,10 @@
 							        <element maxOccurs="1" minOccurs="1" name="indexedContentTypePath" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="indexedFolderRecycled" type="xsd:boolean"/>
 
 						<!-- The maximum number of assets to render in XML form for this index block 
 							 REQUIRED -->
@@ -4672,7 +4935,6 @@
                    <enumeration value="ascending"/>
 
                    <enumeration value="descending"/>
-
                  
               </restriction>
 
@@ -4751,22 +5013,27 @@
 		   </complexType>
 
 		
-		<!-- A block containing plain XHTML -->
+		<!-- A block containing plain XHTML or Structured Data-->
 
-		   <complexType name="xhtmlBlock">
+		   <complexType name="xhtmlDataDefinitionBlock">
 
 			    <complexContent>
 
 				     <extension base="impl:block">
 
-					      <sequence>
+					      <choice>
 
-						<!-- The XHTML content of the block
-							 REQUIRED -->
+						<!-- A choice between structured data and xhtml content -->
 
-						       <element maxOccurs="1" minOccurs="1" name="xhtml" type="xsd:string"/>
+						       <choice>
 
-					      </sequence>
+							        <element maxOccurs="1" minOccurs="1" name="structuredData" type="impl:structured-data"/>
+
+							        <element maxOccurs="1" minOccurs="1" name="xhtml" type="xsd:string"/>
+
+						       </choice>
+
+					      </choice>
 
 				     </extension>
 
@@ -4877,7 +5144,7 @@
 
 			    <sequence>
 
-				<!-- For defining a page's structured data definition relationship
+				<!-- For defining a page's Data Definition relationship
 					 REQUIRED -->
 
 				     <choice>
@@ -4939,9 +5206,17 @@
 
 						       <choice maxOccurs="1" minOccurs="1">
 
+							
+							<!-- Assets that exist in a recycle bin will not be matched by path but id only. -->
+
 							        <choice>
 
+								<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 			 in case if the selected asset gets restored from the recycle bin. -->
+
 								         <element maxOccurs="1" minOccurs="1" name="blockId" type="xsd:string"/>
+
+								<!-- Path works only for non-recycled assets -->
 
 								         <element maxOccurs="1" minOccurs="1" name="blockPath" type="xsd:string"/>
 
@@ -4949,7 +5224,12 @@
 
 							        <choice>
 
+								<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 			 in case if the selected asset gets restored from the recycle bin. -->
+
 								         <element maxOccurs="1" minOccurs="1" name="fileId" type="xsd:string"/>
+
+								<!-- Path works only for non-recycled assets -->
 
 								         <element maxOccurs="1" minOccurs="1" name="filePath" type="xsd:string"/>
 
@@ -4957,7 +5237,12 @@
 
 							        <choice>
 
+								<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 			 in case if the selected asset gets restored from the recycle bin. -->
+
 								         <element maxOccurs="1" minOccurs="1" name="pageId" type="xsd:string"/>
+
+								<!-- Path works only for non-recycled assets -->
 
 								         <element maxOccurs="1" minOccurs="1" name="pagePath" type="xsd:string"/>
 
@@ -4965,13 +5250,26 @@
 
 							        <choice>
 
+								<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
+						 			 in case if the selected asset gets restored from the recycle bin. -->
+
 								         <element maxOccurs="1" minOccurs="1" name="symlinkId" type="xsd:string"/>
+
+								<!-- Path works only for non-recycled assets -->
 
 								         <element maxOccurs="1" minOccurs="1" name="symlinkPath" type="xsd:string"/>
 
 							        </choice>
 
 						       </choice>
+
+						
+						<!-- Recycled - true if selected asset is recycled. 
+							 Use for reading only - this attribute is not neccessary when editing or creating and will not affect these operations if provided.
+							 When editing or creating and selecting a recycled asset, id of the asset should be provided (blockId instead of blockPath, fileId instead of filePath etc.).
+							 If path is provided, Cascade will look only for a non-recycled asset with given path even if "recycled=true" is provided. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="recycled" type="xsd:boolean"/>
 
 					      </sequence>
 
@@ -5076,16 +5374,25 @@
 
 				     <extension base="impl:publishable-asset">
 
-					<!-- A file either contains plaintext content or
-						 binary content (base64 encoded) REQUIRED -->
+					      <sequence>
 
-					      <choice>
+						<!-- A file either contains plaintext content or
+							 binary content (base64 encoded) REQUIRED -->
 
-						       <element maxOccurs="1" minOccurs="1" name="text" type="xsd:string"/>
+						       <choice>
 
-						       <element maxOccurs="1" minOccurs="1" name="data" type="xsd:base64Binary"/>
+							        <element maxOccurs="1" minOccurs="1" name="text" type="xsd:string"/>
 
-					      </choice>
+							        <element maxOccurs="1" minOccurs="1" name="data" type="xsd:base64Binary"/>
+
+						       </choice>
+
+						
+						       <element maxOccurs="1" minOccurs="0" name="rewriteLinks" type="xsd:boolean"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="maintainAbsoluteLinks" type="xsd:boolean"/>
+
+					      </sequence>
 
 				     </extension>
 
@@ -5112,7 +5419,7 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="textBlock" nillable="true" type="impl:textBlock"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="xhtmlBlock" nillable="true" type="impl:xhtmlBlock"/>
+					      <element maxOccurs="1" minOccurs="1" name="xhtmlDataDefinitionBlock" nillable="true" type="impl:xhtmlDataDefinitionBlock"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="xmlBlock" nillable="true" type="impl:xmlBlock"/>
 					
@@ -5159,9 +5466,9 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="pageConfigurationSetContainer" nillable="true" type="impl:pageConfigurationSetContainer"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="structuredDataDefinition" nillable="true" type="impl:structuredDataDefinition"/>
+					      <element maxOccurs="1" minOccurs="1" name="dataDefinition" nillable="true" type="impl:dataDefinition"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="structuredDataDefinitionContainer" nillable="true" type="impl:structuredDataDefinitionContainer"/>
+					      <element maxOccurs="1" minOccurs="1" name="dataDefinitionContainer" nillable="true" type="impl:dataDefinitionContainer"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="metadataSet" nillable="true" type="impl:metadataSet"/>
 
@@ -5314,6 +5621,21 @@
 		   </complexType>
 
 		
+		   <complexType name="move">
+
+			    <sequence>
+
+				     <element maxOccurs="1" minOccurs="1" name="identifier" nillable="false" type="impl:identifier"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="moveParameters" nillable="false" type="impl:moveParameters"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="workflowConfiguration" nillable="false" type="impl:workflow-configuration"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
 		   <complexType name="publish">
 
 			    <sequence>
@@ -5408,6 +5730,8 @@
 				     <element name="delete" type="impl:delete"/>
 
 				     <element name="edit" type="impl:edit"/>
+
+				     <element name="move" type="impl:move"/>
 
 				     <element name="publish" type="impl:publish"/>
 
@@ -5512,7 +5836,6 @@
     <wsdl:message name="readRequest">
 	   
 	     <wsdl:part element="impl:read" name="parameters"/>
-
 	   
     </wsdl:message>
 
@@ -5660,6 +5983,20 @@
     <wsdl:message name="copyResponse">
 
 	     <wsdl:part element="impl:copyResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
+   
+    <wsdl:message name="moveRequest">
+
+	     <wsdl:part element="impl:move" name="parameters"/>
+   
+    </wsdl:message>
+
+
+    <wsdl:message name="moveResponse">
+
+	     <wsdl:part element="impl:moveResponse" name="parameters"/>
 	   
     </wsdl:message>
 
@@ -5854,6 +6191,15 @@
 
 	    </wsdl:operation>
 
+	  
+	    <wsdl:operation name="move">
+
+		     <wsdl:input message="impl:moveRequest" name="moveRequest"/>
+
+		     <wsdl:output message="impl:moveResponse" name="moveResponse"/>
+
+	    </wsdl:operation>
+
 	   
 	    <wsdl:operation name="readWorkflowInformation">
 
@@ -5882,6 +6228,7 @@
 	    </wsdl:operation>
 		
     </wsdl:portType>
+
 
    <!-- Bind the AssetOperationServiceHandler -->
 
@@ -6186,6 +6533,25 @@
             </wsdl:input>
 
             <wsdl:output name="copyResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+      
+        <wsdl:operation name="move">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="moveRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="moveResponse">
 
                 <wsdlsoap:body use="literal"/>
 
