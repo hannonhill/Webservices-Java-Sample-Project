@@ -17,16 +17,20 @@
 package com.cms.webservices;
 
 import com.hannonhill.www.ws.ns.AssetOperationService.AssetFactory;
+import com.hannonhill.www.ws.ns.AssetOperationService.AssetFactoryContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.BaseAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.Connector;
 import com.hannonhill.www.ws.ns.AssetOperationService.ConnectorContentTypeLink;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContaineredAsset;
+import com.hannonhill.www.ws.ns.AssetOperationService.Destination;
 import com.hannonhill.www.ws.ns.AssetOperationService.DublinAwareAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.ExpiringAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.FeedBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.File;
 import com.hannonhill.www.ws.ns.AssetOperationService.Folder;
 import com.hannonhill.www.ws.ns.AssetOperationService.FolderContainedAsset;
+import com.hannonhill.www.ws.ns.AssetOperationService.Group;
+import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 import com.hannonhill.www.ws.ns.AssetOperationService.IndexBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockType;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet;
@@ -35,6 +39,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.PageConfiguration;
 import com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSet;
 import com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.PageRegion;
+import com.hannonhill.www.ws.ns.AssetOperationService.PublishSet;
 import com.hannonhill.www.ws.ns.AssetOperationService.PublishableAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.Reference;
 import com.hannonhill.www.ws.ns.AssetOperationService.Role;
@@ -46,12 +51,14 @@ import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataAssetType;
 import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataNode;
 import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataType;
 import com.hannonhill.www.ws.ns.AssetOperationService.Symlink;
+import com.hannonhill.www.ws.ns.AssetOperationService.Target;
 import com.hannonhill.www.ws.ns.AssetOperationService.Template;
 import com.hannonhill.www.ws.ns.AssetOperationService.TextBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.TransportContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector;
 import com.hannonhill.www.ws.ns.AssetOperationService.User;
 import com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector;
+import com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinition;
 import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock;
 import com.hannonhill.www.ws.ns.AssetOperationService.XsltFormat;
@@ -492,13 +499,28 @@ public final class WebservicesUtils
     }
 
     /**
-     * Nulls out unneeded properties of an XhtmlBlock object
+     * Nulls out unneeded properties of an XhtmlStructuredDataBlock object
      * 
-     * @param xhtmlBlock
+     * @param structuredDataBlock
      */
-    public static final void nullXhtmlBlockValues(XhtmlDataDefinitionBlock xhtmlBlock)
+    public static final void nullXhtmlDataDefinitionBlockValues(XhtmlDataDefinitionBlock structuredDataBlock)
     {
-        nullExpiringValues(xhtmlBlock);
+        //If the block has structured data, null out the structured data
+        //relationships as well
+        StructuredData sData = structuredDataBlock.getStructuredData();
+        if (sData != null)
+        {
+            if (sData.getDefinitionId() != null)
+                sData.setDefinitionPath(null);
+            StructuredDataNode[] nodes = sData.getStructuredDataNodes();
+
+            if (nodes != null)
+            {
+                nullStructuredData(nodes);
+            }
+        }
+
+        nullExpiringValues(structuredDataBlock);
     }
 
     /**
@@ -579,41 +601,69 @@ public final class WebservicesUtils
     {
         nullAssetValues(ms);
         nullContaineredValues(ms);
-        ms.setAuthorFieldRequired(null);
-        ms.setAuthorFieldVisibility(null);
-        ms.setDescriptionFieldRequired(null);
-        ms.setDescriptionFieldVisibility(null);
-        ms.setDisplayNameFieldRequired(null);
-        ms.setDisplayNameFieldVisibility(null);
-        ms.setDynamicMetadataFieldDefinitions(null);
-        ms.setEndDateFieldRequired(null);
-        ms.setEndDateFieldVisibility(null);
-        ms.setKeywordsFieldRequired(null);
-        ms.setKeywordsFieldVisibility(null);
-        ms.setReviewDateFieldRequired(null);
-        ms.setReviewDateFieldVisibility(null);
-        ms.setStartDateFieldRequired(null);
-        ms.setStartDateFieldVisibility(null);
-        ms.setSummaryFieldRequired(null);
-        ms.setSummaryFieldVisibility(null);
-        ms.setTeaserFieldRequired(null);
-        ms.setTeaserFieldVisibility(null);
-        ms.setTitleFieldRequired(null);
-        ms.setTitleFieldVisibility(null);
     }
 
+    /**
+     * Nulls out unneeded values for Destination objects before
+     * submitting for edit or create.
+     * 
+     * @param dest
+     */
+    public static final void nullDestinationValues(Destination dest)
+    {
+        nullAssetValues(dest);
+        // couldn't call nullContaineredValues because Destination is
+        // not in the ContaineredAsset hierarchy probably because it is
+        // used both for Sites - where it does have containers - and in Global -
+        // where it does not
+        if (dest.getParentContainerId() != null)
+            dest.setParentContainerPath(null);
+        if (dest.getSiteId() != null)
+            dest.setSiteName(null);
+        if (dest.getTransportId() != null)
+            dest.setTransportPath(null);
+    }
+
+    /**
+     * Nulls out unneeded values for AssetFactory objects before
+     * submitting for edit or create.
+     * 
+     * @param af
+     */
     public static final void nullAssetFactoryValues(AssetFactory af)
     {
         nullAssetValues(af);
         nullContaineredValues(af);
-        af.setAllowSubfolderPlacement(null);
-        af.setBaseAssetId(null);
-        af.setBaseAssetPath(null);
-        af.setOverwrite(null);
-        af.setPlacementFolderId(null);
-        af.setPlacementFolderPath(null);
-        af.setWorkflowDefinitionId(null);
-        af.setWorkflowDefinitionPath(null);
+        if (af.getBaseAssetId() != null && !af.getBaseAssetId().equals(""))
+            af.setBaseAssetPath(null);
+        if (af.getPlacementFolderId() != null && !af.getPlacementFolderId().equals(""))
+            af.setPlacementFolderPath(null);
+        if (af.getWorkflowDefinitionId() != null && !af.getWorkflowDefinitionId().equals(""))
+            af.setWorkflowDefinitionPath(null);
+    }
+
+    /**
+     * Nulls out unneeded values for AssetFactoryContainer objects before
+     * submitting for edit or create.
+     * 
+     * @param afc
+     */
+    public static final void nullAssetFactoryContainerValues(AssetFactoryContainer afc)
+    {
+        nullAssetValues(afc);
+        nullContaineredValues(afc);
+        afc.setChildren(null);
+    }
+
+    /**
+     * Nulls out all un-required WorkflowDefinition fields
+     * 
+     * @param wf
+     */
+    public static final void nullWorkflowDefinitionValues(WorkflowDefinition wf)
+    {
+        nullAssetValues(wf);
+        nullContaineredValues(wf);
     }
 
     /**
@@ -664,5 +714,64 @@ public final class WebservicesUtils
     public static final void nullWordPressConnectorValues(WordPressConnector wpc)
     {
         nullConnectorValues(wpc);
+    }
+
+    /**
+     * Nulls out unneeded values from a Group
+     * 
+     * @param g
+     */
+    public static final void nullGroupValues(Group g)
+    {
+        g.setEntityType(null);
+        if (g.getGroupAssetFactoryContainerId() != null && !g.getGroupAssetFactoryContainerId().equals(""))
+            g.setGroupAssetFactoryContainerPath(null);
+        if (g.getGroupBaseFolderId() != null && !g.getGroupBaseFolderId().equals(""))
+            g.setGroupBaseFolderPath(null);
+        if (g.getGroupStartingPageId() != null && !g.getGroupStartingPageId().equals(""))
+            g.setGroupStartingPagePath(null);
+    }
+
+    /**
+     * Nulls out unneeded values from a PublishSet
+     * 
+     * @param ps
+     */
+    public static final void nullPublishSetValues(PublishSet ps)
+    {
+        nullContaineredValues(ps);
+        for (Identifier i : ps.getFiles())
+            nullIdentifierValues(i);
+        for (Identifier i : ps.getPages())
+            nullIdentifierValues(i);
+        for (Identifier i : ps.getFolders())
+            nullIdentifierValues(i);
+    }
+
+    /**
+     * Nulls out unneeded values from an Identifier
+     * 
+     * @param i
+     */
+    private static final void nullIdentifierValues(Identifier i)
+    {
+        if (i.getId() != null && !i.getId().equals(""))
+            i.setPath(null);
+    }
+
+    /**
+     * Nulls out unneeded values from a Target
+     * 
+     * @param t
+     */
+    public static final void nullTargetValues(Target t)
+    {
+        nullAssetValues(t);
+        if (t.getBaseFolderId() != null && !t.getBaseFolderId().equals(""))
+            t.setBaseFolderPath(null);
+        if (t.getCssFileId() != null && !t.getCssFileId().equals(""))
+            t.setCssFilePath(null);
+        if (t.getParentTargetId() != null && !t.getParentTargetId().equals(""))
+            t.setParentTargetPath(null);
     }
 }

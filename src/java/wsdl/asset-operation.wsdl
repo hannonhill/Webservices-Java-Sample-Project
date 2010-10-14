@@ -1203,6 +1203,12 @@
 
 				     <enumeration value="transport"/>
 
+				     <enumeration value="transport_fs"/>
+
+				     <enumeration value="transport_ftp"/>
+
+				     <enumeration value="transport_db"/>
+
 				     <enumeration value="transportcontainer"/>
 
 				     <enumeration value="user"/>
@@ -1302,6 +1308,7 @@
 			    </complexContent>
 			
 		   </complexType>
+
 		
 		
 		<!-- A search result -->
@@ -2779,6 +2786,7 @@
 							 This asset factory container will determine which asset factories
 							 show on that user's dashboard under the "My New Content Wizards" section in the site.
 							 NOT REQUIRED default: none -->
+
 					 
 						       <choice>
 
@@ -2927,6 +2935,7 @@
 			    </sequence>
 	
 		   </complexType>
+
 				
 		
 		   <complexType name="assetFactory">
@@ -2937,11 +2946,10 @@
 
 					      <sequence>
 
-						<!-- comma-delimited list of strings for which this asset factory
-							 is available 
-							 NOT REQUIRED default: empty -->
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
 
-						       <element maxOccurs="1" name="applicableGroups" type="xsd:string"/>
+						       <element maxOccurs="1" minOccurs="0" name="applicableGroups" type="xsd:string"/>
 
 						<!-- The type of asset this factory will create 
 							 REQUIRED -->
@@ -3123,10 +3131,10 @@
 
 					      <sequence>
 
-						<!-- comma-delimited list of strings for which this asset factory
-							 container is available -->
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
 
-						       <element maxOccurs="1" name="applicableGroups" type="xsd:string"/>
+						       <element maxOccurs="1" minOccurs="0" name="applicableGroups" type="xsd:string"/>
 
 						<!-- the array of children -->
 
@@ -4016,9 +4024,8 @@
 
 						       </choice>
 
-						<!-- semi-colon delimited list of the groups of users that are able to publish
-							 using this destination
-							 NOT REQUIRED default: empty -->
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
 
 						       <element maxOccurs="1" minOccurs="0" name="applicableGroups" type="xsd:string"/>
 
@@ -4458,11 +4465,10 @@
 
 					      <sequence>
 
-						<!-- A semicolon-delimited list of groups for which this workflow definition
-							 is applicable 
-							 REQUIRED -->
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
 
-						       <element maxOccurs="1" minOccurs="1" name="applicableGroups" type="xsd:string"/>
+						       <element maxOccurs="1" minOccurs="0" name="applicableGroups" type="xsd:string"/>
 
 						<!-- Whether or not this is a copy type workflow
 							 NOT REQUIRED default: false -->
@@ -4935,6 +4941,7 @@
                    <enumeration value="ascending"/>
 
                    <enumeration value="descending"/>
+
                  
               </restriction>
 
@@ -5173,6 +5180,7 @@
 			    </sequence>
 
 		   </complexType>
+
 	
 		
 		<!-- A single structured data node -->
@@ -6217,6 +6225,7 @@
 		     <wsdl:output message="impl:readAuditsResponse" name="readAuditsResponse"/>
 
 	    </wsdl:operation>
+
 	
 	   
 	    <wsdl:operation name="performWorkflowTransition">
