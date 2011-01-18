@@ -1213,6 +1213,8 @@
 
 				     <enumeration value="user"/>
 
+				     <enumeration value="workflow"/>
+
 				     <enumeration value="workflowdefinition"/>
 
 				     <enumeration value="workflowdefinitioncontainer"/>
@@ -1306,9 +1308,9 @@
 				     </extension>
 
 			    </complexContent>
+
 			
 		   </complexType>
-
 		
 		
 		<!-- A search result -->
@@ -1500,6 +1502,7 @@
 					      <sequence>
 
 						       <element maxOccurs="1" minOccurs="0" name="workingCopyIdentifier" nillable="true" type="impl:identifier"/>
+
 						
 					      </sequence>
 
@@ -1554,6 +1557,14 @@
 						<!-- The unordered steps of this workflow -->
 
 						       <element maxOccurs="1" minOccurs="0" name="unorderedSteps" type="impl:workflowSteps"/>
+
+						<!-- The date when the workflow was initialized -->
+
+						       <element maxOccurs="1" minOccurs="0" name="startDate" nillable="true" type="xsd:dateTime"/>
+
+						<!--  The due date of the workflow -->
+
+						       <element maxOccurs="1" minOccurs="0" name="endDate" nillable="true" type="xsd:dateTime"/>
 
 					      </sequence>
 
@@ -1642,10 +1653,6 @@
 				<!-- The id of the step that will result when this action is chosen by the user -->
 
 				     <element maxOccurs="1" minOccurs="1" name="nextId" type="xsd:string"/>
-
-				<!-- Specifies whether the action is automatic or not -->
-
-				     <element maxOccurs="1" minOccurs="1" name="move" type="xsd:string"/>
 
 			    </sequence>
 
@@ -2621,6 +2628,7 @@
 
 					<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
 						 in case if the selected asset gets restored from the recycle bin. -->
+
 				
 					      <element maxOccurs="1" minOccurs="0" name="groupStartingPageId" type="xsd:string"/>
 
@@ -2786,7 +2794,6 @@
 							 This asset factory container will determine which asset factories
 							 show on that user's dashboard under the "My New Content Wizards" section in the site.
 							 NOT REQUIRED default: none -->
-
 					 
 						       <choice>
 
@@ -2935,7 +2942,6 @@
 			    </sequence>
 	
 		   </complexType>
-
 				
 		
 		   <complexType name="assetFactory">
@@ -3843,6 +3849,7 @@
 			    </complexContent>
 
 		   </complexType>
+
 					
 		
 		   <complexType name="target">
@@ -4173,7 +4180,7 @@
 						<!-- The site id
 							 REQUIRED -->
 
-						       <element maxOccurs="1" minOccurs="1" name="transportSiteId" type="xsd:positiveInteger"/>
+						       <element maxOccurs="1" minOccurs="1" name="transportSiteId" type="xsd:nonNegativeInteger"/>
 
 						
 						<!-- The name of the database server
@@ -4941,7 +4948,6 @@
                    <enumeration value="ascending"/>
 
                    <enumeration value="descending"/>
-
                  
               </restriction>
 
@@ -5180,7 +5186,6 @@
 			    </sequence>
 
 		   </complexType>
-
 	
 		
 		<!-- A single structured data node -->
@@ -5430,6 +5435,7 @@
 					      <element maxOccurs="1" minOccurs="1" name="xhtmlDataDefinitionBlock" nillable="true" type="impl:xhtmlDataDefinitionBlock"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="xmlBlock" nillable="true" type="impl:xmlBlock"/>
+
 					
 					      <element maxOccurs="1" minOccurs="1" name="file" nillable="true" type="impl:file"/>
 
@@ -5455,6 +5461,7 @@
 					      <element maxOccurs="1" minOccurs="1" name="group" nillable="true" type="impl:group"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="role" nillable="true" type="impl:role"/>
+
 					
 					      <element maxOccurs="1" minOccurs="1" name="assetFactory" nillable="true" type="impl:assetFactory"/>
 
@@ -5547,6 +5554,10 @@
 					 NOT REQUIRED default: the defaults as definined in the workflow definition -->
 
 				     <element maxOccurs="1" minOccurs="0" name="workflowStepConfigurations" type="impl:workflow-step-configurations"/>
+
+				<!-- Optional due date for the workflow.  If not specified, will default to 7 days from today -->
+
+				     <element maxOccurs="1" minOccurs="0" name="endDate" type="xsd:dateTime"/>
 
 			    </sequence>
 
@@ -5842,6 +5853,7 @@
 
 	
     <wsdl:message name="readRequest">
+
 	   
 	     <wsdl:part element="impl:read" name="parameters"/>
 	   
@@ -5858,6 +5870,7 @@
     <wsdl:message name="searchRequest">
 
 	     <wsdl:part element="impl:search" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5872,6 +5885,7 @@
     <wsdl:message name="readAccessRightsRequest">
 
 	     <wsdl:part element="impl:readAccessRights" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5886,6 +5900,7 @@
     <wsdl:message name="editAccessRightsRequest">
 
 	     <wsdl:part element="impl:editAccessRights" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5900,6 +5915,7 @@
     <wsdl:message name="listMessagesRequest">
 
 	     <wsdl:part element="impl:listMessages" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5914,6 +5930,7 @@
     <wsdl:message name="markMessageRequest">
 
 	     <wsdl:part element="impl:markMessage" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5928,6 +5945,7 @@
     <wsdl:message name="deleteMessageRequest">
 
 	     <wsdl:part element="impl:deleteMessage" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5942,6 +5960,7 @@
     <wsdl:message name="sendMessageRequest">
 
 	     <wsdl:part element="impl:sendMessage" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5956,6 +5975,7 @@
     <wsdl:message name="checkOutRequest">
 
 	     <wsdl:part element="impl:checkOut" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5970,6 +5990,7 @@
     <wsdl:message name="checkInRequest">
 
 	     <wsdl:part element="impl:checkIn" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5984,6 +6005,7 @@
     <wsdl:message name="copyRequest">
 
 	     <wsdl:part element="impl:copy" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -5998,6 +6020,7 @@
     <wsdl:message name="moveRequest">
 
 	     <wsdl:part element="impl:move" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -6012,6 +6035,7 @@
     <wsdl:message name="readWorkflowInformationRequest">
 
 	     <wsdl:part element="impl:readWorkflowInformation" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -6026,6 +6050,7 @@
     <wsdl:message name="readAuditsRequest">
 
 	     <wsdl:part element="impl:readAudits" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -6040,6 +6065,7 @@
     <wsdl:message name="performWorkflowTransitionRequest">
 
 	     <wsdl:part element="impl:performWorkflowTransition" name="parameters"/>
+
    
     </wsdl:message>
 
@@ -6225,7 +6251,6 @@
 		     <wsdl:output message="impl:readAuditsResponse" name="readAuditsResponse"/>
 
 	    </wsdl:operation>
-
 	
 	   
 	    <wsdl:operation name="performWorkflowTransition">
