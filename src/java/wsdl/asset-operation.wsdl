@@ -1741,6 +1741,18 @@
 						       <element maxOccurs="1" minOccurs="0" name="lastModifiedBy" nillable="true" type="xsd:string"/>
 
 						
+						<!-- When this asset was created
+							NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="createdDate" nillable="true" type="xsd:dateTime"/>
+
+						
+						<!-- Who created this asset
+							NOT REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="createdBy" nillable="true" type="xsd:string"/>
+
+						
 						<!-- The Site in which the asset is located 
 							 NOT REQUIRED -->
 	
@@ -2605,7 +2617,6 @@
 
 				<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
 					 in case if the selected asset gets restored from the recycle bin. -->
-
 				
 				     <element maxOccurs="1" minOccurs="0" name="groupStartingPageId" type="xsd:string"/>
 
@@ -2647,6 +2658,7 @@
 					 show on that user's dashboard under the "My New Content Wizards" section.
 					 PRIORITY: groupAssetFactoryContainerId > groupAssetFactoryContainerPath
 					 NOT REQUIRED default: none -->
+
 					 
 				     <element maxOccurs="1" minOccurs="0" name="groupAssetFactoryContainerId" type="xsd:string"/>
 
@@ -2761,7 +2773,6 @@
 							 This asset factory container will determine which asset factories
 							 show on that user's dashboard under the "My New Content Wizards" section in the site.
 							 NOT REQUIRED default: none -->
-
 	
 			 
 			 			<!-- Priority: siteAssetFactoryContainerId > siteAssetFactoryContainerPath
@@ -2919,6 +2930,7 @@
 			    </sequence>
 	
 		   </complexType>
+
 				
 		
 		   <complexType name="assetFactory">
@@ -2974,6 +2986,7 @@
 						<!-- Path works only for non-recycled assets -->
 
 						       <element maxOccurs="1" minOccurs="0" name="placementFolderPath" type="xsd:string"/>
+
 
 						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
 
@@ -3978,7 +3991,6 @@
 						<!-- Path works only for non-recycled assets -->
 
 						       <element maxOccurs="1" minOccurs="0" name="cssFilePath" type="xsd:string"/>
-
 
 						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
 
@@ -5213,6 +5225,7 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="xhtml" type="xsd:string"/>
 
+
 						<!-- The page configurations containing page-level region block/format assignments
 							 NOT REQUIRED when creating a page, but you must submit assignment information when editing
 							 if you want to maintain the region assignments -->
@@ -5920,7 +5933,6 @@
 
 
     <wsdl:message name="readResponse">
-
 	   
 	     <wsdl:part element="impl:readResponse" name="parameters"/>
 	   
@@ -6297,6 +6309,7 @@
 		     <wsdl:output message="impl:readAuditsResponse" name="readAuditsResponse"/>
 
 	    </wsdl:operation>
+
 	
 	   
 	    <wsdl:operation name="performWorkflowTransition">
