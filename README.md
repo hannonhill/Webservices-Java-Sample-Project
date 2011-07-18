@@ -67,8 +67,8 @@ To do this:
 At this point Eclipse will re-build the project for you. You should not see any red x's
 on any files (which indicate java compilation errors). 
 
-h3. To run an example
+## To run an example
  
-# Open the TestRead class
-# Change the credentials to those of a user that has access to the Base Folder in the Global Area
-# Right click the main() method > Run as... > Java Application
+1. Open the TestRead class
+2. Change the credentials to those of a user that has access to the Base Folder in the Global Area
+3. Right click the main() method > Run as... > Java Application
