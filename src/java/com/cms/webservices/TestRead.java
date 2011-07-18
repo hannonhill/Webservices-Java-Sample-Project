@@ -48,8 +48,8 @@ public class TestRead
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setPassword("<REDACTED>");
         authentication.setUsername("<REDACTED>");
+        authentication.setPassword("<REDACTED>");
 
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
         AssetOperationHandler handler = serviceLocator.getAssetOperationService();
