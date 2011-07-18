@@ -8,12 +8,12 @@ Version History:
 
 Prerequisites: 
 
-This assumes you have Eclipse 3.6+, EGit plugin, and Ant 1.7+ installed and configured
+This assumes you have Eclipse 3.6+, m2e Maven plugin, and Ant 1.7+ installed and configured
 for your development environment, as well as the included Axis libraries.
 
-Eclipse can be downloaded at: http://download.eclipse.org
-Ant can be downloaded at: http://ant.apache.org/
-EGit can be installed by going to Help > Eclipse Marketplace and typing 'EGit'
+- Eclipse can be downloaded at: http://download.eclipse.org
+- Ant can be downloaded at: http://ant.apache.org/
+- m2e Maven plugin comes with Eclipse 3.7+ and can be installed for older versions by going to Help > Eclipse Marketplace and typing 'EGit'
 
 It is recommended you set up your environment in the following manner:
 
@@ -49,22 +49,26 @@ To do this:
 
 	You should see a successful ant build similar to:
 
-	C:\Java\workspace\Cascade Webservices>ant
-	Buildfile: build.xml
-
+	$ ant
+	Buildfile: /Users/bradley/cascade/Webservices-Java-Sample-Project/build.xml
+	
 	clean:
-
+	   [delete] Deleting directory /Users/bradley/cascade/Webservices-Java-Sample-Project/src/gen
+	
 	generate-stubs:
-	[wsdl2java] WSDL2Java C:\Java\workspace\Cascade Webservices\src\java\wsdl\asset-
-	operation.wsdl
-
+	    [mkdir] Created dir: /Users/bradley/cascade/Webservices-Java-Sample-Project/src/gen
+	[wsdl2java] WSDL2Java /Users/bradley/cascade/Webservices-Java-Sample-Project/src/java/wsdl/asset-operation.wsdl
+	
 	BUILD SUCCESSFUL
-	Total time: 1 second
+	Total time: 5 seconds
 
 6.) Refresh the project by right clicking on the project and selecting "Refresh".
 
 At this point Eclipse will re-build the project for you. You should not see any red x's
-on any files (which indicate java compilation errors). You should then be able to run the
-"TestRead" application to ensure the local axis webservices infrastructure can communicate with your
-Cascade Server instance. Remember, that your Cascade instance must be running for the Web Service
-to execute.
+on any files (which indicate java compilation errors). 
+
+h3. To run an example
+ 
+# Open the TestRead class
+# Change the credentials to those of a user that has access to the Base Folder in the Global Area
+# Right click the main() method > Run as... > Java Application
