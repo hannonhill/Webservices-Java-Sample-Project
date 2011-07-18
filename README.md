@@ -1,9 +1,7 @@
 ## History
 
 Author: Zach Bailey, Bradley Wagner
-
 Version: 0.3
-
 Version History:
 
 - 0.1 Initial Version
@@ -18,6 +16,9 @@ for your development environment
 - Eclipse can be downloaded at: http://download.eclipse.org
 - Maven can be downloaded at: http://maven.apache.org/download.html
 - m2e Maven plugin comes with Eclipse 3.7+ and can be installed for older versions by going to Help > Eclipse Marketplace and typing 'm2e'
+
+### Mac OS X
+
 
 ## Environment 
 
