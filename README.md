@@ -46,14 +46,13 @@ with the web services layer.
 
 To do this:
 
-1.) Open the WSDL from your Cascade Server instance by going to: http://<your-cascade-url>/ws/services/AssetOperationService?wsdl
-2.) Save this as a file "asset-operation.wsdl".
-3.) Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
-4.) Open a command-line/terminal window to run ant. 
-5.) Navigate to to the base directory where the project was unzipped to 
-    (for example, java/workspace/Cascade Webservices) and type the command "ant"
+1. Open the WSDL from your Cascade Server instance by going to: http://<your-cascade-url>/ws/services/AssetOperationService?wsdl
+2. Save this as a file "asset-operation.wsdl".
+3. Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
+4. Open a command-line/terminal window to run ant. 
+5. Navigate to to the base directory where the project was unzipped to (e.g. java/workspace/Cascade Webservices) and type the command "ant"
 
-	You should see a successful ant build similar to:
+   You should see a successful ant build similar to:
 
 	$ ant
 	Buildfile: /Users/bradley/cascade/Webservices-Java-Sample-Project/build.xml
