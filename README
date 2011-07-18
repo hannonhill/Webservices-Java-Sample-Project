@@ -1,31 +1,32 @@
 Author: Zach Bailey
 Author: Bradley Wagner
-Version: 0.2
+Version: 0.3
 Version History:
 	- 0.1 Initial Version
 	- 0.2 Updating instructions to use custom property to specify lib locations instead of adding libs manually
+	- 0.3 Adding Maven
 
 Prerequisites: 
 
-This assumes you have Eclipse 3.4+ and Ant 1.7+ installed and configured
+This assumes you have Eclipse 3.6+, EGit plugin, and Ant 1.7+ installed and configured
 for your development environment, as well as the included Axis libraries.
 
 Eclipse can be downloaded at: http://download.eclipse.org
 Ant can be downloaded at: http://ant.apache.org/
+EGit can be installed by going to Help > Eclipse Marketplace and typing 'EGit'
 
 It is recommended you set up your environment in the following manner:
 
 1.) Create a "java" directory. Unzip Ant, Eclipse into it.
 2.) Add the ant executable to your path. You should be able to type "ant" on the command line
-	and see ant (attempt to) run, something like:
-	C:\>ant
-	Buildfile: build.xml does not exist!
-	Build failed
+	if it's been correctly added to your path:
+	$ ant -version
+	Apache Ant(TM) version 1.8.2 compiled on December 20 2010
 	
 3.) Create a "workspace" folder in your java folder. This will be the root of your Eclipse workspace.
 	When you start Eclipse for the first time, tell it to use this folder as the workspace folder. If
 	you are already using Eclipse and have already designated a workspace folder, you can continue using
-	that foloder.
+	that folder.
 	
 Next we will bring the project into Eclipse. To do this:
 
