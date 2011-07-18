@@ -1,15 +1,51 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>Cascade-Java-Web-Services-Example-Project</groupId>
-  <artifactId>Cascade-Java-Web-Services-Example-Project</artifactId>
-  <version>6.8.3</version>
-  
-  <dependencies>
-      <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>4.8.2</version>
-          <scope>compile</scope>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>Cascade-Java-Web-Services-Example-Project</groupId>
+    <artifactId>Cascade-Java-Web-Services-Example-Project</artifactId>
+    <version>6.8.3</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>compile</scope>
         </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.apache.axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.axis</groupId>
+            <artifactId>axis-jaxrpc</artifactId>
+            <version>1.4</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>axistools-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <sourceDirectory>src/java/wsdl</sourceDirectory>
+                    <wsdlFiles>
+                        <wsdlFile>asset-operation.wsdl</wsdlFile>
+                    </wsdlFiles>
+                    <subPackageByFileName>false</subPackageByFileName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
