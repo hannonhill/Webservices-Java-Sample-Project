@@ -34,9 +34,6 @@ public class TestRead
      * - alt+shift+x, t (Windows)
      * - option+command+x, t (Mac)
      * 
-     * This should output something similar to:
-     * "Got read result: com.hannonhill.www.ws.ns.AssetOperationService.ReadResult@145e16fe"
-     * 
      * @throws Exception
      */
     @Test
@@ -45,7 +42,7 @@ public class TestRead
         Identifier toRead = new Identifier();
         Path path = new Path();
         path.setPath("/");
-        path.setSiteName("<SITE-NAME>");
+        path.setSiteName("bradley");
         toRead.setPath(path);
         toRead.setType(EntityTypeString.folder);
 
@@ -53,14 +50,12 @@ public class TestRead
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setUsername("<REDACTED>");
-        authentication.setPassword("<REDACTED>");
+        authentication.setUsername("bradley.wagner");
+        authentication.setPassword("soosad");
 
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
         AssetOperationHandler handler = serviceLocator.getAssetOperationService();
         ReadResult result = handler.read(authentication, toRead);
-        System.out.println("Got read result: " + result);
-        System.out.println("Read was " + (result.getSuccess().equals("true") ? "successful." : "unsuccessful. Error is: " + result.getMessage()));
 
         assertTrue(result.getSuccess().equals("true") ? true : false);
     }

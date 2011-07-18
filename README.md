@@ -134,14 +134,14 @@ You should see a successful ant build similar to:
  
 1. Open the TestRead class
 2. Change the credentials to those of a user that has access to the Base Folder in a Site
-3. Enter the name of the site where it says "<SITE-NAME>"
+3. Enter the name of the site where it says "\<SITE-NAME\>"
 4. Right click the testBaseFolderRead() method > Run as... > JUnit Test
 
 ## To run a test with Maven
 
 1. Open the TestRead class
 2. Change the credentials to those of a user that has access to the Base Folder in a Site
-3. Enter the name of the site where it says "<SITE-NAME>"
+3. Enter the name of the site where it says "\<SITE-NAME\>"
 4. Open a terminal
 5. Navigate to the project folder
 6. Type: `mvn -Dtest=TestRead test`

@@ -41,8 +41,8 @@ public class TestEdit
         Path path = new Path();
 
         // set your page path and site name
-        path.setPath("/path/to/page");
-        path.setSiteName("<SITE-NAME>");
+        path.setPath("/test-block-overrides");
+        path.setSiteName("bradley");
         toRead.setPath(path);
         toRead.setType(EntityTypeString.page);
 
@@ -50,8 +50,8 @@ public class TestEdit
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setUsername("<REDACTED>");
-        authentication.setPassword("<REDACTED>");
+        authentication.setUsername("bradley.wagner");
+        authentication.setPassword("soosad");
 
         // read the asset
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
