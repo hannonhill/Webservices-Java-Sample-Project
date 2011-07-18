@@ -57,7 +57,7 @@ To do this:
 5. Navigate to to the base directory where the project was unzipped to (e.g. java/workspace/Cascade Webservices) and type the command "maven generate-sources"
 You should see a successful ant build similar to:
 
-		$ ant
+		$ maven generate-sources
         [INFO] Scanning for projects...
         [INFO]                                                                         
         [INFO] ------------------------------------------------------------------------
