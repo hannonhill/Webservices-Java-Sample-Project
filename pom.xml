@@ -13,12 +13,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.axis</groupId>
+            <groupId>axis</groupId>
             <artifactId>axis</artifactId>
             <version>1.4</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.axis</groupId>
+            <groupId>axis</groupId>
             <artifactId>axis-jaxrpc</artifactId>
             <version>1.4</version>
         </dependency>
@@ -26,6 +26,7 @@
 
     <build>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
