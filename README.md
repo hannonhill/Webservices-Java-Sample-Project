@@ -53,18 +53,19 @@ To do this:
 5. Navigate to to the base directory where the project was unzipped to (e.g. java/workspace/Cascade Webservices) and type the command "ant"
 You should see a successful ant build similar to:
 
-	$ ant
-	Buildfile: /Users/bradley/cascade/Webservices-Java-Sample-Project/build.xml
+		$ ant
+		Buildfile: /Users/bradley/cascade/Webservices-Java-Sample-Project/build.xml
+		
+		clean:
+		   [delete] Deleting directory /Users/bradley/cascade/Webservices-Java-Sample-Project/src/gen
+		
+		generate-stubs:
+		    [mkdir] Created dir: /Users/bradley/cascade/Webservices-Java-Sample-Project/src/gen
+		[wsdl2java] WSDL2Java /Users/bradley/cascade/Webservices-Java-Sample-Project/src/java/wsdl/asset-operation.wsdl
+		
+		BUILD SUCCESSFUL
+		Total time: 5 seconds
 	
-	clean:
-	   [delete] Deleting directory /Users/bradley/cascade/Webservices-Java-Sample-Project/src/gen
-	
-	generate-stubs:
-	    [mkdir] Created dir: /Users/bradley/cascade/Webservices-Java-Sample-Project/src/gen
-	[wsdl2java] WSDL2Java /Users/bradley/cascade/Webservices-Java-Sample-Project/src/java/wsdl/asset-operation.wsdl
-	
-	BUILD SUCCESSFUL
-	Total time: 5 seconds
 6. Refresh the project by right clicking on the project and selecting "Refresh".
 
 At this point Eclipse will re-build the project for you. You should not see any red x's
