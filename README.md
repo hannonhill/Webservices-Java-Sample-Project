@@ -27,11 +27,11 @@ It is recommended you set up your environment in the following manner:
 2. Ensue the "maven" executable is in your path. Type "mvn" on the command line if it's been correctly added to your path:
 
 	$ mvn -v
-	Apache Maven 3.0.2 (r1056850; 2011-01-08 19:58:10-0500)
-	Java version: 1.6.0_24, vendor: Apple Inc.
-	Java home: /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-	Default locale: en_US, platform encoding: MacRoman
-	OS name: "mac os x", version: "10.6.8", arch: "x86_64", family: "mac"
+    Apache Maven 3.0.2 (r1056850; 2011-01-08 19:58:10-0500)
+    Java version: 1.6.0_24, vendor: Apple Inc.
+    Java home: /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+    Default locale: en_US, platform encoding: MacRoman
+    OS name: "mac os x", version: "10.6.8", arch: "x86_64", family: "mac"
 	
 3. Create a "workspace" folder in your java folder. This will be the root of your Eclipse workspace. 
    When you start Eclipse for the first time, tell it to use this folder as the workspace folder. If
