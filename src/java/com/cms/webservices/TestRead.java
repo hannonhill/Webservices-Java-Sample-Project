@@ -14,6 +14,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.AssetOperationHandlerServi
 import com.hannonhill.www.ws.ns.AssetOperationService.Authentication;
 import com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
+import com.hannonhill.www.ws.ns.AssetOperationService.Path;
 import com.hannonhill.www.ws.ns.AssetOperationService.Read;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 
@@ -26,22 +27,26 @@ import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 public class TestRead
 {
     /**
+     * Tests reading of the Base Folder in a given Site
+     * 
      * From inside Eclipse, run this test using:
      * 
      * - alt+shift+x, t (Windows)
      * - option+command+x, t (Mac)
      * 
      * This should output something similar to:
-     * 
      * "Got read result: com.hannonhill.www.ws.ns.AssetOperationService.ReadResult@145e16fe"
      * 
      * @throws Exception
      */
     @Test
-    public void testFolderRead() throws Exception
+    public void testBaseFolderRead() throws Exception
     {
         Identifier toRead = new Identifier();
-        toRead.setId("ROOT");
+        Path path = new Path();
+        path.setPath("/");
+        path.setSiteName("<SITE-NAME>");
+        toRead.setPath(path);
         toRead.setType(EntityTypeString.folder);
 
         Read read = new Read();
