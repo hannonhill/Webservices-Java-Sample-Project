@@ -17,7 +17,7 @@ for your development environment, as well as the included Axis libraries.
 
 - Eclipse can be downloaded at: http://download.eclipse.org
 - Ant can be downloaded at: http://ant.apache.org/
-- m2e Maven plugin comes with Eclipse 3.7+ and can be installed for older versions by going to Help > Eclipse Marketplace and typing 'EGit'
+- m2e Maven plugin comes with Eclipse 3.7+ and can be installed for older versions by going to Help > Eclipse Marketplace and typing 'm2e'
 
 ## Environment 
 
