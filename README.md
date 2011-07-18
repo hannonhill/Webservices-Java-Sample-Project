@@ -51,8 +51,7 @@ To do this:
 3. Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
 4. Open a command-line/terminal window to run ant. 
 5. Navigate to to the base directory where the project was unzipped to (e.g. java/workspace/Cascade Webservices) and type the command "ant"
-
-   You should see a successful ant build similar to:
+You should see a successful ant build similar to:
 
 	$ ant
 	Buildfile: /Users/bradley/cascade/Webservices-Java-Sample-Project/build.xml
@@ -66,8 +65,7 @@ To do this:
 	
 	BUILD SUCCESSFUL
 	Total time: 5 seconds
-
-6.) Refresh the project by right clicking on the project and selecting "Refresh".
+6. Refresh the project by right clicking on the project and selecting "Refresh".
 
 At this point Eclipse will re-build the project for you. You should not see any red x's
 on any files (which indicate java compilation errors). 
