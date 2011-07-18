@@ -1,9 +1,11 @@
 ## History
 
-Author: Zach Bailey
-Author: Bradley Wagner
+Author: Zach Bailey, Bradley Wagner
+
 Version: 0.3
+
 Version History:
+
 - 0.1 Initial Version
 - 0.2 Updating instructions to use custom property to specify lib locations instead of adding libs manually
 - 0.3 Adding Maven
