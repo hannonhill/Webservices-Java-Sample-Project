@@ -1,12 +1,14 @@
+## History
+
 Author: Zach Bailey
 Author: Bradley Wagner
 Version: 0.3
 Version History:
-	- 0.1 Initial Version
-	- 0.2 Updating instructions to use custom property to specify lib locations instead of adding libs manually
-	- 0.3 Adding Maven
+- 0.1 Initial Version
+- 0.2 Updating instructions to use custom property to specify lib locations instead of adding libs manually
+- 0.3 Adding Maven
 
-Prerequisites: 
+## Prerequisites 
 
 This assumes you have Eclipse 3.6+, m2e Maven plugin, and Ant 1.7+ installed and configured
 for your development environment, as well as the included Axis libraries.
@@ -14,6 +16,8 @@ for your development environment, as well as the included Axis libraries.
 - Eclipse can be downloaded at: http://download.eclipse.org
 - Ant can be downloaded at: http://ant.apache.org/
 - m2e Maven plugin comes with Eclipse 3.7+ and can be installed for older versions by going to Help > Eclipse Marketplace and typing 'EGit'
+
+## Environment 
 
 It is recommended you set up your environment in the following manner:
 
