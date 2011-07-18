@@ -48,4 +48,12 @@
             </plugin>
         </plugins>
     </build>
+    <organization>
+        <name>Hannon Hill</name>
+        <url>http://hannonhill.com</url>
+    </organization>
+    <scm>
+        <connection>scm:git:git://github.com/hannonhill/Webservices-Java-Sample-Project.git</connection>
+        <url>https://github.com/hannonhill/Webservices-Java-Sample-Project</url>
+    </scm>
 </project>
