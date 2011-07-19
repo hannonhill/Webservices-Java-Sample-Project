@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/mailapi_1_3_1.jar"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
 	<classpathentry kind="lib" path="lib/axis-ant.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
