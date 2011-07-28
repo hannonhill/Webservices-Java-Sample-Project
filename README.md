@@ -63,10 +63,10 @@ To update the generated Web Services stubs to correspond to your version of Casc
 3. Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
 4. In Eclipse, right-click the project and click Refresh. Maven should run and regenerate your stubs based on this updated WSDL file.
 5. If for some reason it doesn't, open a command-line/terminal window to run maven.
-6. Navigate to to the base directory where the project was created to (e.g. java/workspace/Cascade Webservices) and type the command "maven generate-sources"
+6. Navigate to to the base directory where the project was created to (e.g. java/workspace/Cascade Webservices) and type the command "mvn generate-sources"
 You should see a successful ant build similar to:
 
-		$ maven generate-sources
+		$ mvn generate-sources
         [INFO] Scanning for projects...
         [INFO]                                                                         
         [INFO] ------------------------------------------------------------------------
