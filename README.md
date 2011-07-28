@@ -97,7 +97,7 @@ This assumes you have Maven 3+ and Git installed.
 
 Clone the project:
 
-1. Clone this repository: git clone git@github.com:hannonhill/Webservices-Java-Sample-Project.git
+1. Clone this repository: git clone git://github.com/hannonhill/Webservices-Java-Sample-Project.git
 2. Change into the directory for the newly created project
 3. Use Git to checkout the appropriate branch of this project for your Cascade installation. For example, if you're running Cascade version 6.8.3, checkout 6.8.x: `git checkout 6.8.x`
 
