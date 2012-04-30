@@ -198,6 +198,11 @@
 
 					      <element name="identifier" type="impl:identifier"/>
 
+					
+					<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
+
+					      <element name="unpublish" type="xsd:boolean"/>
+
 				     </sequence>
 
 			    </complexType>
@@ -580,6 +585,48 @@
 		   </element>
 
 		
+		   <element name="siteCopy">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+
+					
+					<!-- ONE REQUIRED: The id or name of the site that needs to be copied. If both id and name is provided, id will be used. -->
+
+					      <element maxOccurs="1" minOccurs="0" name="originalSiteId" type="xsd:string"/>
+
+					      <element maxOccurs="1" minOccurs="0" name="originalSiteName" type="xsd:string"/>
+
+					
+					<!-- REQUIRED: The name of the new site -->
+
+					      <element maxOccurs="1" minOccurs="1" name="newSiteName" nillable="false" type="xsd:string"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
+		   <element name="siteCopyResponse">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="siteCopyReturn" type="impl:operationResult"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
 		   <element name="readAudits">
 
 			    <complexType>
@@ -871,6 +918,81 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="searchTemplates" type="xsd:boolean"/>
 
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchAssetFactories" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchPageConfigurationSets" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchContentTypes" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchDataDefinitions" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchWorkflowDefinitions" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchMetadataSets" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchPublishSets" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchConnectors" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchDestinations" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchTargets" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchTransports" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchUsers" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchGroups" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchRoles" type="xsd:boolean"/>
+
+				<!-- Whether or not to search template assets
+					 NOT REQUIRED default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="searchSites" type="xsd:boolean"/>
+				
 			    </sequence>
 
 		   </complexType>
@@ -1136,6 +1258,8 @@
 
 				     <enumeration value="block_XML"/>
 
+				     <enumeration value="block_TWITTER_FEED"/>
+
 				     <enumeration value="connectorcontainer"/>
 
 				     <enumeration value="twitterconnector"/>
@@ -1311,7 +1435,6 @@
 			    </complexContent>
 			
 		   </complexType>
-
 		
 		
 		<!-- A search result -->
@@ -2318,8 +2441,19 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="moveRenameAssets" type="xsd:boolean"/>
-
 				
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="recycleBinChecker" type="xsd:boolean"/>
+				
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="pathRepairTool" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="databaseExportTool" type="xsd:boolean"/>
+							
 			    </sequence>
 
 		   </complexType>
@@ -2502,6 +2636,26 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="moveRenameAssets" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="diagnosticTests" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="alwaysAllowedToToggleDataChecks" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="viewPublishQueue" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="reorderPublishQueue" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="cancelPublishJobs" type="xsd:boolean"/>
 
 			    </sequence>
 
@@ -4926,29 +5080,10 @@
 
 						       <element maxOccurs="1" minOccurs="1" name="depthOfIndex" type="xsd:nonNegativeInteger"/>
 
-						<!-- Whether or not to include a page's rendered content (XHTML or structured data XML)
-							 in the rendered XML
-							 NOT REQUIRED default: false -->
+						<!-- The rendering behavior of the folder index block 
+						     NOT REQUIRED default: "render-normally" -->
 
-						       <element maxOccurs="1" minOccurs="0" name="includePageContent" type="xsd:boolean"/>
-
-						<!-- When this block is included in a page region, whether or not to include that page's
-							 rendered content (XHTML or structured data XML) in the rendered XML
-							 NOT REQUIRED default: false -->
-
-						       <element maxOccurs="1" minOccurs="0" name="includeCurrentPageXML" type="xsd:boolean"/>
-
-						<!-- When this block is included in a page region, only render the current page's information
-							 and the information for this page's folder hierarchy
-							 NOT REQUIRED default: false -->
-
-						       <element maxOccurs="1" minOccurs="0" name="renderCurrentPageAndHierarchy" type="xsd:boolean"/>
-
-						<!-- When "renderCurrentPageAndHierarchy" is "true", setting this will also include the children
-							 of the folders in the folder hierarchy for the current page
-							 NOT REQUIRED default: false -->
-
-						       <element maxOccurs="1" minOccurs="0" name="includeChildrenInHierarchy" type="xsd:boolean"/>
+						       <element maxOccurs="1" minOccurs="0" name="renderingBehavior" type="impl:index-block-rendering-behavior"/>
 
 						<!-- Whether or not to index page assets
 							 NOT REQUIRED default: false -->
@@ -4969,9 +5104,6 @@
 							 NOT REQUIRED default: false -->
 
 						       <element maxOccurs="1" minOccurs="0" name="indexFiles" type="xsd:boolean"/>
-
-						<!-- By default, name and id are indexed. The following options will incldue more data
-							 in the rendered XML -->
 
 						<!-- Whether or not to include path data 
 							 NOT REQUIRED default: false -->
@@ -5022,6 +5154,11 @@
 						     NOT REQUIRED default: "ascending" -->
 
 						       <element maxOccurs="1" minOccurs="0" name="sortOrder" type="impl:index-block-sort-order"/>
+
+						<!-- The Page XML rendering option
+						     NOT REQUIRED default: "no-render" -->
+
+						       <element maxOccurs="1" minOccurs="0" name="pageXML" type="impl:index-block-page-xml"/>
 
 					      </sequence>
 
@@ -5075,13 +5212,48 @@
                    <enumeration value="ascending"/>
 
                    <enumeration value="descending"/>
-
                  
               </restriction>
 
            </simpleType>
 
-        
+
+        <!-- for indexBlock's pageXML property -->
+
+           <simpleType name="index-block-page-xml">
+
+			    <restriction base="xsd:string">
+
+				     <enumeration value="no-render"/>
+
+				     <enumeration value="render"/>
+
+				     <enumeration value="render-current-page-only"/>
+
+			    </restriction>
+
+           </simpleType>
+
+
+        <!-- For indexBlock's renderingBehavior property -->
+
+           <simpleType name="index-block-rendering-behavior">
+
+			    <restriction base="xsd:string">
+
+				     <enumeration value="render-normally"/>
+
+				     <enumeration value="hierarchy"/>
+
+				     <enumeration value="hierarchy-with-siblings"/>
+
+				     <enumeration value="hierarchy-siblings-forward"/>
+
+			    </restriction>
+
+           </simpleType>
+
+
 		<!-- A block which aggregates a URL as an XML feed -->
 
 		   <complexType name="feedBlock">
@@ -5179,6 +5351,67 @@
 			    </complexContent>
 
 		   </complexType>
+
+		
+		   <complexType name="twitterFeedBlock">
+
+			    <complexContent>
+
+				     <extension base="impl:block">
+
+					      <sequence>
+
+						<!-- The Account Name of the block
+							Required for Tweets Only and Tweets and Mentions query types -->
+
+						       <element maxOccurs="1" minOccurs="0" name="accountName" type="xsd:string"/>
+
+						<!-- The Search String for the block 
+							Required for Tweets Only and Tweets and Mentions search terms types-->
+
+						       <element maxOccurs="1" minOccurs="0" name="searchString" type="xsd:string"/>
+
+						<!-- The maximum number of tweets which can be shown 
+							REQUIRED-->
+
+						       <element maxOccurs="1" minOccurs="1" name="maxResults" type="xsd:nonNegativeInteger"/>
+
+						<!-- Should the twitter feed block use the default CSS style?
+							REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="useDefaultStyle" type="xsd:boolean"/>
+
+						<!--  Should the twitter feed block include the JQuery API -->
+
+					 	       <element maxOccurs="1" minOccurs="1" name="excludeJQuery" type="xsd:boolean"/>
+
+					 	<!-- The type of twitter feed block
+							 REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="1" name="queryType" type="impl:twitter-query-type"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <simpleType name="twitter-query-type">
+
+			    <restriction base="xsd:string">
+
+				     <enumeration value="user-only"/>
+
+				     <enumeration value="users-and-mentions"/>
+
+				     <enumeration value="search-terms"/>
+
+			    </restriction>
+
+		   </simpleType>
 
 		
 		<!-- End concrete block types -->
@@ -5617,6 +5850,8 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="workflowDefinitionContainer" nillable="true" type="impl:workflowDefinitionContainer"/>
 
+					      <element maxOccurs="1" minOccurs="1" name="twitterFeedBlock" nillable="true" type="impl:twitterFeedBlock"/>
+
 					<!-- other assets -->
 
 					      <element maxOccurs="1" minOccurs="1" name="site" nillable="true" type="impl:site"/>
@@ -5766,6 +6001,11 @@
 
 				     <element maxOccurs="1" minOccurs="1" name="identifier" type="impl:identifier"/>
 
+
+					<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
+
+				     <element name="unpublish" type="xsd:boolean"/>
+
 			    </sequence>
 
 		   </complexType>
@@ -5845,6 +6085,26 @@
 		   </complexType>
 
 		
+		   <complexType name="siteCopy">
+
+			    <sequence>
+
+				<!-- ONE REQUIRED: The id or name of the site that needs to be copied. If both id and name is provided, id will be used. -->
+
+				     <element maxOccurs="1" minOccurs="0" name="originalSiteId" type="xsd:string"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="originalSiteName" type="xsd:string"/>
+
+				
+				<!-- REQUIRED: The name of the new site -->
+
+				     <element maxOccurs="1" minOccurs="1" name="newSiteName" nillable="false" type="xsd:string"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
 		   <complexType name="operation">
 
 			    <choice>
@@ -5870,6 +6130,8 @@
 				     <element name="checkIn" type="impl:checkIn"/>
 
 				     <element name="copy" type="impl:copy"/>
+
+				     <element name="siteCopy" type="impl:siteCopy"/>
 
 			    </choice>
 
@@ -5960,7 +6222,6 @@
     <wsdl:message name="readRequest">
 	   
 	     <wsdl:part element="impl:read" name="parameters"/>
-
 	   
     </wsdl:message>
 
@@ -6112,6 +6373,20 @@
     </wsdl:message>
 
    
+    <wsdl:message name="siteCopyRequest">
+
+	     <wsdl:part element="impl:siteCopy" name="parameters"/>
+   
+    </wsdl:message>
+
+
+    <wsdl:message name="siteCopyResponse">
+
+	     <wsdl:part element="impl:siteCopyResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
+
     <wsdl:message name="moveRequest">
 
 	     <wsdl:part element="impl:move" name="parameters"/>
@@ -6317,6 +6592,15 @@
 	    </wsdl:operation>
 
 	  
+        <wsdl:operation name="siteCopy">
+
+		     <wsdl:input message="impl:siteCopyRequest" name="siteCopyRequest"/>
+
+		     <wsdl:output message="impl:siteCopyResponse" name="siteCopyResponse"/>
+
+	    </wsdl:operation>
+
+
 	    <wsdl:operation name="move">
 
 		     <wsdl:input message="impl:moveRequest" name="moveRequest"/>
@@ -6666,6 +6950,25 @@
         </wsdl:operation>
 
       
+	    <wsdl:operation name="siteCopy">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="siteCopyRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="siteCopyResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+
         <wsdl:operation name="move">
 
             <wsdlsoap:operation soapAction=""/>
