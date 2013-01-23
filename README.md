@@ -39,7 +39,7 @@ Then you need to install 2 additional connectors from the m2e Marketplace in Ecl
 
 1. File > Import > Check out Maven Projects from SCM > Next
 2. Click "m2e Marketplace" link
-3. Select the de.theit.m2e.axistools and m2e-egit connectors from the m2e Marketplace
+3. Select the "Axis Tools m2e" and "m2e-egit" connectors from the m2e Marketplace
 4. Click Finish
 5. Follow the prompts to install these connectors
 6. Restart Eclipse once these are done installing
