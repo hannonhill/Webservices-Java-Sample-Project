@@ -194,14 +194,9 @@
 
 				     <sequence>
 
-					      <element name="authentication" type="impl:authentication"/>
+					      <element maxOccurs="1" minOccurs="1" name="authentication" type="impl:authentication"/>
 
-					      <element name="identifier" type="impl:identifier"/>
-
-					
-					<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
-
-					      <element name="unpublish" type="xsd:boolean"/>
+					      <element maxOccurs="1" minOccurs="1" name="publishInformation" type="impl:publishInformation"/>
 
 				     </sequence>
 
@@ -209,7 +204,7 @@
 
 		   </element>
 
-		
+
 		   <element name="publishResponse">
 
 			    <complexType>
@@ -355,6 +350,106 @@
 		   </element>
 
 		
+		   <element name="readWorkflowSettings">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="authentication" type="impl:authentication"/>
+
+					      <element name="identifier" type="impl:identifier"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
+		   <element name="readWorkflowSettingsResponse">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="readWorkflowSettingsReturn" type="impl:readWorkflowSettingsResult"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
+		   <element name="editWorkflowSettings">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+
+					      <element maxOccurs="1" minOccurs="1" name="workflowSettings" nillable="false" type="impl:workflowSettings"/>
+
+					      <element maxOccurs="1" minOccurs="0" name="applyInheritWorkflowsToChildren" nillable="false" type="xsd:boolean"/>
+
+					      <element maxOccurs="1" minOccurs="0" name="applyRequireWorkflowToChildren" nillable="false" type="xsd:boolean"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
+		   <element name="editWorkflowSettingsResponse">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="editWorkflowSettingsReturn" type="impl:operationResult"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+
+		   <element name="listSubscribers">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="authentication" type="impl:authentication"/>
+
+					      <element name="identifier" type="impl:identifier"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+		
+		   <element name="listSubscribersResponse">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="listSubscribersReturn" type="impl:listSubscribersResult"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+
 		   <element name="listMessages">
 
 			    <complexType>
@@ -627,6 +722,36 @@
 		   </element>
 
 		
+		   <element name="listSites">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+
+		   <element name="listSitesResponse">
+
+			    <complexType>
+
+				     <sequence>
+
+					      <element name="listSitesReturn" type="impl:listSitesResult"/>
+
+				     </sequence>
+
+			    </complexType>
+
+		   </element>
+
+
 		   <element name="readAudits">
 
 			    <complexType>
@@ -1373,7 +1498,11 @@
 
 				     <element maxOccurs="1" minOccurs="1" name="readAccessRightsResult" type="impl:readAccessRightsResult"/>
 
+				     <element maxOccurs="1" minOccurs="1" name="readWorkflowSettingsResult" type="impl:readWorkflowSettingsResult"/>
+
 				     <element maxOccurs="1" minOccurs="1" name="readAuditsResult" type="impl:readAuditsResult"/>
+
+				     <element maxOccurs="1" minOccurs="1" name="listSubscribersResult" type="impl:listSubscribersResult"/>
 
 				     <element maxOccurs="1" minOccurs="1" name="searchResult" type="impl:searchResult"/>
 				
@@ -1472,6 +1601,25 @@
 		   </complexType>
 
 		
+		   <complexType name="listSitesResult">
+
+			    <complexContent>
+
+				     <extension base="impl:operationResult">
+
+					      <sequence>
+
+						       <element maxOccurs="1" minOccurs="1" name="sites" type="impl:assetIdentifiers"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+			
+		   </complexType>
+
+
 		<!-- A result of reading the access rights of an asset -->
 
 		   <complexType name="readAccessRightsResult">
@@ -1586,7 +1734,84 @@
 
 		   </simpleType>
 
+
+		<!-- A result of reading the workflow information of a folder -->
+
+		   <complexType name="readWorkflowSettingsResult">
+
+			    <complexContent>
+
+				     <extension base="impl:operationResult">
+
+					      <sequence>
+
+						       <element maxOccurs="1" minOccurs="1" name="workflowSettings" nillable="false" type="impl:workflowSettings"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+
+		<!-- Complete data with the workflow settings of a folder -->
+
+		   <complexType name="workflowSettings">
+
+			    <sequence>
+
+				     <element maxOccurs="1" minOccurs="1" name="identifier" nillable="false" type="impl:identifier"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="workflowDefinitions" nillable="false" type="impl:assetIdentifiers"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="inheritWorkflows" nillable="false" type="xsd:boolean"/>
+
+				     <element maxOccurs="1" minOccurs="0" name="requireWorkflow" nillable="false" type="xsd:boolean"/>
+
+				
+				<!-- Ignored on edit -->
+
+				     <element maxOccurs="1" minOccurs="0" name="inheritedWorkflowDefinitions" nillable="false" type="impl:assetIdentifiers"/>
+
+			    </sequence>
+
+		   </complexType>
+
 		
+		   <complexType name="listSubscribersResult">
+
+			    <complexContent>
+
+				     <extension base="impl:operationResult">
+
+					      <sequence>
+
+						       <element maxOccurs="1" minOccurs="1" name="subscribers" type="impl:assetIdentifiers"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+			
+		   </complexType>
+
+
+		<!-- Array wrapper for multiple identifiers of assets -->
+
+		   <complexType name="assetIdentifiers">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="assetIdentifier" nillable="false" type="impl:identifier"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
 		   <complexType name="listMessagesResult">
 
 			    <complexContent>
@@ -2995,6 +3220,21 @@
 
 						       </choice>
 
+						<!-- semicolon-delimited list of string user names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no users -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToUsers" type="xsd:string"/>
+
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToGroups" type="xsd:string"/>
+
+						<!-- Whether or not to send a report when there are no errors
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportOnErrorOnly" type="xsd:boolean"/>
+
 						<!-- REQUIRED The recycle bin expiration time -->
 
 						       <element maxOccurs="1" minOccurs="1" name="recycleBinExpiration" type="impl:recycleBinExpiration"/>
@@ -3865,10 +4105,43 @@
 
 				     <element maxOccurs="1" minOccurs="0" name="visibility" type="impl:metadata-field-visibility"/>
 
-				<!-- The XML configuration of this field
-					 REQUIRED -->
+				<!-- REQUIRED for radio, checkbox, dropdown and multiselect types
+					 NOT REQUIRED and ignored for text type -->
 
-				     <element maxOccurs="1" minOccurs="1" name="configurationXML" type="xsd:string"/>
+				     <element maxOccurs="1" minOccurs="0" name="possibleValues" type="impl:dynamic-metadata-field-definition-values"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="dynamic-metadata-field-definition-values">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="possibleValue" nillable="true" type="impl:dynamic-metadata-field-definition-value"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		<!-- Represents a possible value for a dynamic metadata field -->
+
+		   <complexType name="dynamic-metadata-field-definition-value">
+
+			    <sequence>
+
+				<!-- The actual string value 
+				     NOT REQUIRED - when not provided, an empty string will be used as a value -->
+
+				     <element maxOccurs="1" minOccurs="0" name="value" type="xsd:string"/>
+
+				
+				<!-- Whether or not this value should be checked by default when creating new assets through web UI
+					 NOT REQUIRED - false by default -->
+
+				     <element maxOccurs="1" minOccurs="0" name="selectedByDefault" type="xsd:boolean"/>
 
 			    </sequence>
 
@@ -3905,6 +4178,8 @@
 				     <enumeration value="dropdown"/>
 
 				     <enumeration value="checkbox"/>
+
+				     <enumeration value="multiselect"/>
 
 			    </restriction>
 
@@ -3987,6 +4262,21 @@
 							        <element maxOccurs="1" minOccurs="0" name="cronExpression" type="xsd:string"/>
 
 						       </choice>
+
+						<!-- semicolon-delimited list of string user names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no users -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToUsers" type="xsd:string"/>
+
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToGroups" type="xsd:string"/>
+
+						<!-- Whether or not to send a report when there are no errors
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportOnErrorOnly" type="xsd:boolean"/>
 
 					      </sequence>
 
@@ -4207,6 +4497,21 @@
 
 						       </choice>
 
+						<!-- semicolon-delimited list of string user names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no users -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToUsers" type="xsd:string"/>
+
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToGroups" type="xsd:string"/>
+
+						<!-- Whether or not to send a report when there are no errors
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportOnErrorOnly" type="xsd:boolean"/>
+
 						<!-- the array of children -->
 
 						       <element maxOccurs="1" minOccurs="0" name="children" nillable="true" type="impl:container-children"/>
@@ -4284,6 +4589,11 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="enabled" type="xsd:boolean"/>
 
+						<!-- Whether or not this destination is checked by default when publish screen is loaded
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="checkedByDefault" type="xsd:boolean"/>
+
 						<!-- When publishing, whether or not to only publish ASCII characters.
 							 Unicode characters will be escaped 
 							 NOT REQUIRED default: false -->
@@ -4323,7 +4633,22 @@
 
 						       </choice>
 
-						
+						<!-- semicolon-delimited list of string user names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no users -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToUsers" type="xsd:string"/>
+
+						<!-- semicolon-delimited list of string group names for which this asset is available for use 
+							 NOT REQUIRED leave out to assign no groups -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportToGroups" type="xsd:string"/>
+
+						<!-- Whether or not to send a report when there are no errors
+							 NOT REQUIRED default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="sendReportOnErrorOnly" type="xsd:boolean"/>
+
+
 						<!-- The base URL which should be used for linking to a given configuration during publishing, when this destination
 							 is explicity chosen for a configuration on the content type. -->
 
@@ -5495,6 +5820,11 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="pageConfigurations" nillable="false" type="impl:page-configurations"/>
 
+
+						<!-- NOT REQUIRED, default: false -->
+
+						       <element maxOccurs="1" minOccurs="0" name="maintainAbsoluteLinks" type="xsd:boolean"/>
+
 					      </sequence>
 
 				     </extension>
@@ -5999,18 +6329,39 @@
 
 			    <sequence>
 
-				     <element maxOccurs="1" minOccurs="1" name="identifier" type="impl:identifier"/>
-
-
-					<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
-
-				     <element name="unpublish" type="xsd:boolean"/>
+				     <element maxOccurs="1" minOccurs="1" name="publishInformation" type="impl:publishInformation"/>
 
 			    </sequence>
 
 		   </complexType>
 
 		
+		   <complexType name="publishInformation">
+
+			    <sequence>
+
+				<!-- Identifier of the asset being published
+				     REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="identifier" type="impl:identifier"/>
+
+				<!-- This field is Ignored when identifier (above) points to a Destination
+				     Publishing an asset that does not allow you to select Destinations in the Cascade UI (Publish Set or Target) *will* respect the Destinations
+				     supplied here (this is an inconsistency between the UI and web services).  Supplying an empty set of identifiers will publish to all Destinations
+				     that are enabled and applicable for the user making the web services call. -->
+
+				     <element maxOccurs="1" minOccurs="0" name="destinations" nillable="false" type="impl:assetIdentifiers"/>
+
+				
+				<!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="unpublish" nillable="true" type="xsd:boolean"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
 		   <complexType name="read">
 
 			    <sequence>
@@ -6048,6 +6399,47 @@
 		   </complexType>
 
 		
+		   <complexType name="readWorkflowSettings">
+
+			    <sequence>
+
+				     <element maxOccurs="1" minOccurs="1" name="identifier" nillable="false" type="impl:identifier"/>
+
+			    </sequence>
+
+		   </complexType>
+
+		
+		   <complexType name="editWorkflowSettings">
+
+			    <sequence>
+
+				     <element maxOccurs="1" minOccurs="1" name="workflowSettings" nillable="true" type="impl:workflowSettings"/>
+
+				<!-- NOT REQUIRED, default is false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="applyInheritWorkflowsToChildren" nillable="false" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED, default is false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="applyRequireWorkflowToChildren" nillable="false" type="xsd:boolean"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
+		   <complexType name="listSubscribers">
+
+			    <sequence>
+
+				     <element maxOccurs="1" minOccurs="1" name="identifier" nillable="false" type="impl:identifier"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
 		   <complexType name="checkOut">
 
 			    <sequence>
@@ -6124,6 +6516,12 @@
 				     <element name="readAccessRights" type="impl:readAccessRights"/>
 
 				     <element name="editAccessRights" type="impl:editAccessRights"/>
+
+				     <element name="readWorkflowSettings" type="impl:readWorkflowSettings"/>
+
+				     <element name="editWorkflowSettings" type="impl:editWorkflowSettings"/>
+
+				     <element name="listSubscribers" type="impl:listSubscribers"/>
 
 				     <element name="checkOut" type="impl:checkOut"/>
 
@@ -6275,6 +6673,48 @@
     </wsdl:message>
 
 	
+    <wsdl:message name="readWorkflowSettingsRequest">
+
+	     <wsdl:part element="impl:readWorkflowSettings" name="parameters"/>
+   
+    </wsdl:message>
+
+
+    <wsdl:message name="readWorkflowSettingsResponse">
+
+	     <wsdl:part element="impl:readWorkflowSettingsResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
+	
+    <wsdl:message name="editWorkflowSettingsRequest">
+
+	     <wsdl:part element="impl:editWorkflowSettings" name="parameters"/>
+   
+    </wsdl:message>
+
+
+    <wsdl:message name="editWorkflowSettingsResponse">
+
+	     <wsdl:part element="impl:editWorkflowSettingsResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
+
+    <wsdl:message name="listSubscribersRequest">
+
+	     <wsdl:part element="impl:listSubscribers" name="parameters"/>
+   
+    </wsdl:message>
+
+
+    <wsdl:message name="listSubscribersResponse">
+
+	     <wsdl:part element="impl:listSubscribersResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
+
     <wsdl:message name="listMessagesRequest">
 
 	     <wsdl:part element="impl:listMessages" name="parameters"/>
@@ -6383,6 +6823,20 @@
     <wsdl:message name="siteCopyResponse">
 
 	     <wsdl:part element="impl:siteCopyResponse" name="parameters"/>
+	   
+    </wsdl:message>
+
+   
+    <wsdl:message name="listSitesRequest">
+
+	     <wsdl:part element="impl:listSites" name="parameters"/>
+   
+    </wsdl:message>
+
+   
+    <wsdl:message name="listSitesResponse">
+
+	     <wsdl:part element="impl:listSitesResponse" name="parameters"/>
 	   
     </wsdl:message>
 
@@ -6529,6 +6983,33 @@
 	    </wsdl:operation>
 
 	   
+        <wsdl:operation name="readWorkflowSettings">
+
+		     <wsdl:input message="impl:readWorkflowSettingsRequest" name="readWorkflowSettingsRequest"/>
+
+		     <wsdl:output message="impl:readWorkflowSettingsResponse" name="readWorkflowSettingsResponse"/>
+
+	    </wsdl:operation>
+
+	   
+        <wsdl:operation name="editWorkflowSettings">
+
+		     <wsdl:input message="impl:editWorkflowSettingsRequest" name="editWorkflowSettingsRequest"/>
+
+		     <wsdl:output message="impl:editWorkflowSettingsResponse" name="editWorkflowSettingsResponse"/>
+
+	    </wsdl:operation>
+
+
+        <wsdl:operation name="listSubscribers">
+
+		     <wsdl:input message="impl:listSubscribersRequest" name="listSubscribersRequest"/>
+
+		     <wsdl:output message="impl:listSubscribersResponse" name="listSubscribersResponse"/>
+
+	    </wsdl:operation>
+
+
         <wsdl:operation name="listMessages">
 
 		     <wsdl:input message="impl:listMessagesRequest" name="listMessagesRequest"/>
@@ -6597,6 +7078,15 @@
 		     <wsdl:input message="impl:siteCopyRequest" name="siteCopyRequest"/>
 
 		     <wsdl:output message="impl:siteCopyResponse" name="siteCopyResponse"/>
+
+	    </wsdl:operation>
+
+
+        <wsdl:operation name="listSites">
+
+		     <wsdl:input message="impl:listSitesRequest" name="listSitesRequest"/>
+
+		     <wsdl:output message="impl:listSitesResponse" name="listSitesResponse"/>
 
 	    </wsdl:operation>
 
@@ -6817,6 +7307,63 @@
         </wsdl:operation>
 
 	   
+	    <wsdl:operation name="readWorkflowSettings">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="readWorkflowSettingsRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="readWorkflowSettingsResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+	   
+        <wsdl:operation name="editWorkflowSettings">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="editWorkflowSettingsRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="editWorkflowSettingsResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+
+	    <wsdl:operation name="listSubscribers">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="listSubscribersRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="listSubscribersResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+
         <wsdl:operation name="listMessages">
 
             <wsdlsoap:operation soapAction=""/>
@@ -6961,6 +7508,25 @@
             </wsdl:input>
 
             <wsdl:output name="siteCopyResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+
+	    <wsdl:operation name="listSites">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="listSitesRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="listSitesResponse">
 
                 <wsdlsoap:body use="literal"/>
 
