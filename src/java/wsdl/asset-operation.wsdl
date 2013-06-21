@@ -2078,25 +2078,25 @@
 						       <element maxOccurs="1" minOccurs="0" name="path" type="xsd:string"/>
 
 						
-						<!-- When this asset was last modified
+						<!-- When this asset was last modified. Read only.
 							 NOT REQUIRED -->
 
 						       <element maxOccurs="1" minOccurs="0" name="lastModifiedDate" nillable="true" type="xsd:dateTime"/>
 
 						
-						<!-- Who last modified this asset
+						<!-- Who last modified this asset. Read only.
 							 NOT REQUIRED -->
 
 						       <element maxOccurs="1" minOccurs="0" name="lastModifiedBy" nillable="true" type="xsd:string"/>
 
 						
-						<!-- When this asset was created
+						<!-- When this asset was created. Read only.
 							NOT REQUIRED -->
 
 						       <element maxOccurs="1" minOccurs="0" name="createdDate" nillable="true" type="xsd:dateTime"/>
 
 						
-						<!-- Who created this asset
+						<!-- Who created this asset. Read only.
 							NOT REQUIRED -->
 
 						       <element maxOccurs="1" minOccurs="0" name="createdBy" nillable="true" type="xsd:string"/>
@@ -2678,7 +2678,11 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="databaseExportTool" type="xsd:boolean"/>
-							
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="sendStaleAssetNotifications" type="xsd:boolean"/>
+
 			    </sequence>
 
 		   </complexType>
@@ -2881,6 +2885,10 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="cancelPublishJobs" type="xsd:boolean"/>
+
+				<!-- NOT REQUIRED - default false -->
+
+				     <element maxOccurs="1" minOccurs="0" name="sendStaleAssetNotifications" type="xsd:boolean"/>
 
 			    </sequence>
 
@@ -3574,6 +3582,12 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="contentTypePageConfigurations" nillable="true" type="impl:contentTypePageConfigurations"/>
 
+						
+						<!-- The array of inlineEditableFields
+						     NOT REQUIRED - if not specified, none of the regions or fields will be inline editable -->
+
+						       <element maxOccurs="1" minOccurs="0" name="inlineEditableFields" nillable="true" type="impl:inlineEditableFields"/>
+
 					      </sequence>
 
 				     </extension>
@@ -3647,6 +3661,73 @@
 		   </complexType>
 
 		
+		   <complexType name="inlineEditableFields">
+
+			    <sequence>
+
+				     <element maxOccurs="unbounded" minOccurs="0" name="inlineEditableField" nillable="true" type="impl:inlineEditableField"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
+		   <complexType name="inlineEditableField">
+
+			    <sequence>
+
+				<!-- REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="pageConfigurationName" type="xsd:string"/>
+
+
+				<!-- REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="pageRegionName" type="xsd:string"/>
+
+
+				<!-- NOT REQUIRED
+				     This property is only applicable for data-definition type fields and is need only if the field is inside of a group. 
+				     It holds a list of ancestor data definition groups presented in a form of path. For example, if this field is in 
+				     a group "cities" and that group is in another group "countries", then this property would have value "countries/cities" -->
+
+				     <element maxOccurs="1" minOccurs="0" name="dataDefinitionGroupPath" nillable="true" type="xsd:string"/>
+
+
+				<!-- REQUIRED -->
+
+				     <element maxOccurs="1" minOccurs="1" name="type" type="impl:inlineEditableFieldType"/>
+
+
+				<!-- REQUIRED for metadata and data-definition field type
+					 NOT REQUIRED for xhtml field type
+				     Use title, displayName, summary, teaser, keywords, description, author, startDate, endDate, reviewDate for wired metadata fields, 
+				     field name for dynamic metadata field or field identifier for a data definition field. -->
+
+				     <element maxOccurs="1" minOccurs="0" name="name" nillable="true" type="xsd:string"/>
+
+			    </sequence>
+
+		   </complexType>
+
+
+		   <simpleType name="inlineEditableFieldType">
+
+			    <restriction base="xsd:string">
+
+				     <enumeration value="wired-metadata"/>
+
+				     <enumeration value="dynamic-metadata"/>
+
+				     <enumeration value="data-definition"/>
+
+				     <enumeration value="xhtml"/>
+
+			    </restriction>
+
+		   </simpleType>
+
+
 		   <complexType name="contentTypeContainer">
 
 			    <complexContent>
