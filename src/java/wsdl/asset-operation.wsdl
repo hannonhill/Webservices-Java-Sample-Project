@@ -3216,6 +3216,18 @@
 
                    <element maxOccurs="1" minOccurs="0" name="usesScheduledPublishing" type="xsd:boolean"/>
 
+           <!-- Scheduled publish destination selection mode, see "scheduledDestinationMode" simpleType for acceptable values 
+              NOT REQUIRED
+            -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinationMode" nillable="true" type="impl:scheduledDestinationMode"/>
+
+            <!-- Used in conjunction with scheduledPublishDestinationMode when destinations are to be specified explicitly 
+              NOT REQUIRED
+            -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinations" type="impl:destination-list"/>
+
             <!-- The base time this set will be published. For example if one wanted
                this set to publish at 0100, 0500, 0900, 1300, 1700, 2100, I would enter
                one of those times here and set the "publishInterval" to 4, and the
@@ -3320,6 +3332,21 @@
           </restriction>
 
        </simpleType>
+
+    
+    <!--  for Sites, Targets, Publish Sets scheduledPublishDestinationMode property -->
+
+        <simpleType name="scheduledDestinationMode">
+
+            <restriction base="xsd:string">
+
+                 <enumeration value="all-destinations"/>
+
+                 <enumeration value="selected-destinations"/>
+
+            </restriction>
+
+         </simpleType>
 
     
        <complexType name="role-assignments">
@@ -3651,7 +3678,7 @@
 
         <!-- REQUIRED if "publishMode" is "selected-destinations", else NOT REQUIRED and ignored -->
 
-             <element maxOccurs="1" minOccurs="0" name="destinations" nillable="true" type="impl:contentTypePageConfigurationDestinations"/>
+             <element maxOccurs="1" minOccurs="0" name="destinations" nillable="true" type="impl:destination-list"/>
 
           </sequence>
 
@@ -3673,7 +3700,7 @@
        </simpleType>
 
 
-       <complexType name="contentTypePageConfigurationDestinations">
+       <complexType name="destination-list">
 
           <sequence>
 
@@ -4339,6 +4366,18 @@
 
                    <element maxOccurs="1" minOccurs="0" name="usesScheduledPublishing" type="xsd:boolean"/>
 
+            <!-- Scheduled publish destination selection mode, see "scheduledPublishDestinationMode" simpleType for acceptable values 
+              NOT REQUIRED
+            -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinationMode" nillable="true" type="impl:scheduledDestinationMode"/>
+
+            <!-- Used in conjunction with scheduledPublishDestinationMode when destinations are to be specified explicitly 
+              NOT REQUIRED
+            -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinations" type="impl:destination-list"/>
+
             <!-- The base time this set will be published. For example if one wanted
                this set to publish at 0100, 0500, 0900, 1300, 1700, 2100, I would enter
                one of those times here and set the "publishInterval" to 4, and the
@@ -4573,6 +4612,18 @@
 
                    <element maxOccurs="1" minOccurs="0" name="usesScheduledPublishing" type="xsd:boolean"/>
 
+            <!-- Scheduled publish destination selection mode, see "scheduledPublishDestinationMode" simpleType for acceptable values 
+              NOT REQUIRED
+            -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinationMode" nillable="true" type="impl:scheduledDestinationMode"/>
+
+            <!-- Used in conjunction with scheduledPublishDestinationMode when destinations are to be specified explicitly 
+              NOT REQUIRED
+            -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinations" type="impl:destination-list"/>
+
             <!-- The base time this set will be published. For example if one wanted
                this set to publish at 0100, 0500, 0900, 1300, 1700, 2100, I would enter
                one of those times here and set the "publishInterval" to 4, and the
@@ -4643,7 +4694,11 @@
 
              <enumeration value="RTF"/>
 
-             <enumeration value="WML"/>
+             <enumeration value="JSON"/>
+
+             <enumeration value="JS"/>
+
+             <enumeration value="CSS"/>
 
           </restriction>
 
@@ -4708,6 +4763,14 @@
                NOT REQUIRED default: false -->
 
                    <element maxOccurs="1" minOccurs="0" name="usesScheduledPublishing" type="xsd:boolean"/>
+
+            <!-- Not used, will be ignored if any value is set -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinationMode" nillable="true" type="impl:scheduledDestinationMode"/>
+
+            <!-- Not used, will be ignored if any value is set -->
+
+                   <element maxOccurs="1" minOccurs="0" name="scheduledPublishDestinations" type="impl:destination-list"/>
 
             <!-- The base time this set will be published. For example if one wanted
                this set to publish at 0100, 0500, 0900, 1300, 1700, 2100, I would enter
