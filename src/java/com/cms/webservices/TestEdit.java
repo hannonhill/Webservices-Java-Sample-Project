@@ -41,8 +41,8 @@ public class TestEdit
         Path path = new Path();
 
         // set your page path and site name
-        path.setPath("/test-block-overrides");
-        path.setSiteName("bradley");
+        path.setPath("/about");
+        path.setSiteName("example.com");
         toRead.setPath(path);
         toRead.setType(EntityTypeString.page);
 
@@ -50,14 +50,14 @@ public class TestEdit
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setUsername("bradley.wagner");
-        authentication.setPassword("soosad");
+        authentication.setUsername("admin");
+        authentication.setPassword("admin");
 
         // read the asset
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
         AssetOperationHandler handler = serviceLocator.getAssetOperationService();
         ReadResult result = handler.read(authentication, toRead);
-        assertTrue("Read was not successful", result.getSuccess().equals("true") ? true : false);
+        assertTrue("Read was not successful: " + result.getMessage(), result.getSuccess().equals("true") ? true : false);
 
         // edit the title
         Asset readAsset = result.getAsset();
@@ -65,11 +65,11 @@ public class TestEdit
         page.getMetadata().setTitle("new title");
 
         OperationResult editResult = handler.edit(authentication, readAsset);
-        assertTrue("Edit was not successful", editResult.getSuccess().equals("true") ? true : false);
+        assertTrue("Edit was not successful: " + result.getMessage(), editResult.getSuccess().equals("true") ? true : false);
 
         // re-read to verify title change
         result = handler.read(authentication, toRead);
-        assertTrue("Read was not successful", result.getSuccess().equals("true") ? true : false);
+        assertTrue("Read was not successful: " + result.getMessage(), result.getSuccess().equals("true") ? true : false);
         assertEquals("Title was not changed", "new title", result.getAsset().getPage().getMetadata().getTitle());
     }
 }

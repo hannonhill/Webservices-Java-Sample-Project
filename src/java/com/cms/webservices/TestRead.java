@@ -27,12 +27,18 @@ import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 public class TestRead
 {
     /**
+     * <p>
      * Tests reading of the Base Folder in a given Site
+     * </p>
      * 
+     * <p>
      * From inside Eclipse, run this test using:
+     * </p>
      * 
-     * - alt+shift+x, t (Windows)
-     * - option+command+x, t (Mac)
+     * <ul>
+     * <li>alt+shift+x, t (Windows)</li>
+     * <li>option+command+x, t (Mac)</li>
+     * </ul>
      * 
      * @throws Exception
      */
@@ -42,7 +48,7 @@ public class TestRead
         Identifier toRead = new Identifier();
         Path path = new Path();
         path.setPath("/");
-        path.setSiteName("bradley");
+        path.setSiteName("example.com");
         toRead.setPath(path);
         toRead.setType(EntityTypeString.folder);
 
@@ -50,13 +56,13 @@ public class TestRead
         read.setIdentifier(toRead);
 
         Authentication authentication = new Authentication();
-        authentication.setUsername("bradley.wagner");
-        authentication.setPassword("soosad");
+        authentication.setUsername("admin");
+        authentication.setPassword("admin");
 
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
         AssetOperationHandler handler = serviceLocator.getAssetOperationService();
         ReadResult result = handler.read(authentication, toRead);
 
-        assertTrue(result.getSuccess().equals("true") ? true : false);
+        assertTrue("Error message: " + result.getMessage(), result.getSuccess().equals("true") ? true : false);
     }
 }

@@ -3283,6 +3283,10 @@
 
                    <element maxOccurs="1" minOccurs="1" name="linkCheckerEnabled" type="xsd:boolean"/>
 
+            <!-- REQUIRED Check external links when publishing assets in this site -->
+
+                   <element maxOccurs="1" minOccurs="1" name="externalLinkCheckOnPublish" type="xsd:boolean"/>
+
             <!-- The root folder id and containers idds - used only when reading a site. Unused in other cases
                  NOT REQUIRED ignored -->
 
