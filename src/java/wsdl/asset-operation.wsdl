@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:intf="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
@@ -847,6 +848,68 @@
 
        </element>
     
+    
+     <element name="readPreferences">
+
+         <complexType>
+
+            <sequence>
+
+               <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+
+            </sequence>
+
+         </complexType>
+
+     </element>
+  
+  
+     <element name="readPreferencesResponse">
+
+        <complexType>
+
+           <sequence>
+
+              <element name="readPreferencesReturn" type="impl:readPreferencesResult"/>
+
+           </sequence>
+
+        </complexType>
+
+     </element>
+  
+  
+       <element name="editPreference">
+
+          <complexType>
+
+             <sequence>
+
+                <element maxOccurs="1" minOccurs="1" name="authentication" nillable="false" type="impl:authentication"/>
+
+                <element maxOccurs="1" minOccurs="1" name="preference" nillable="false" type="impl:preference"/>
+
+             </sequence>
+
+          </complexType>
+
+       </element>
+
+    
+       <element name="editPreferenceResponse">
+
+          <complexType>
+
+             <sequence>
+
+                <element name="editPreferenceReturn" type="impl:operationResult"/>
+
+             </sequence>
+
+          </complexType>
+
+       </element>
+
     
     <!-- General elements present in operations and results -->
 
@@ -1861,6 +1924,47 @@
        </complexType>
 
     
+       <complexType name="editPreferenceResult">
+
+           <sequence>
+
+             <element maxOccurs="1" minOccurs="1" name="preference" nillable="false" type="impl:preference"/>
+
+          </sequence>
+ 
+       </complexType>
+
+    
+       <complexType name="readPreferencesResult">
+
+          <complexContent>
+
+             <extension base="impl:operationResult">
+
+                <sequence>
+
+                   <element maxOccurs="1" minOccurs="1" name="preferences" nillable="true" type="impl:preferencesList"/>
+
+                </sequence>
+     
+             </extension>
+
+          </complexContent>
+
+       </complexType>
+
+    
+       <complexType name="preferencesList">
+
+          <sequence>
+
+             <element maxOccurs="unbounded" minOccurs="0" name="preference" nillable="false" type="impl:preference"/>
+
+          </sequence>
+
+       </complexType>
+
+    
        <complexType name="readWorkflowInformationResult">
 
           <complexContent>
@@ -2690,6 +2794,10 @@
         <!-- NOT REQUIRED - default false -->
 
              <element maxOccurs="1" minOccurs="0" name="brokenLinkReportMarkFixed" type="xsd:boolean"/>
+
+        <!-- NOT REQUIRED - default false -->
+
+             <element maxOccurs="1" minOccurs="0" name="changeIdentity" type="xsd:boolean"/>
 
           </sequence>
 
@@ -5481,6 +5589,21 @@
        </complexType>
 
     
+    <!-- Preference object for editing -->
+
+       <complexType name="preference">
+
+          <sequence>
+
+             <element maxOccurs="1" minOccurs="1" name="name" type="xsd:string"/>
+
+             <element maxOccurs="1" minOccurs="1" name="value" type="xsd:string"/>
+
+          </sequence>
+
+       </complexType>
+ 
+    
     <!-- The following concrete types extend expiring-asset -->
 
     
@@ -7075,6 +7198,34 @@
      
     </wsdl:message>
 
+   
+    <wsdl:message name="readPreferencesRequest">
+
+       <wsdl:part element="impl:readPreferences" name="parameters"/>
+   
+    </wsdl:message>
+
+   
+    <wsdl:message name="readPreferencesResponse">
+
+       <wsdl:part element="impl:readPreferencesResponse" name="parameters"/>
+   
+    </wsdl:message>
+
+ 
+     <wsdl:message name="editPreferenceRequest">
+
+       <wsdl:part element="impl:editPreference" name="parameters"/>
+   
+    </wsdl:message>
+
+
+    <wsdl:message name="editPreferenceResponse">
+
+       <wsdl:part element="impl:editPreferenceResponse" name="parameters"/>
+     
+    </wsdl:message>
+ 
 
    <!-- describe the AssetOperationHandler port -->
 
@@ -7304,6 +7455,25 @@
          <wsdl:output message="impl:performWorkflowTransitionResponse" name="performWorkflowTransitionResponse"/>
 
       </wsdl:operation>
+    
+    
+      <wsdl:operation name="readPreferences">
+
+         <wsdl:input message="impl:readPreferencesRequest" name="readPreferencesRequest"/>
+
+         <wsdl:output message="impl:readPreferencesResponse" name="readPreferencesResponse"/>
+
+      </wsdl:operation>
+
+    
+      <wsdl:operation name="editPreference">
+
+         <wsdl:input message="impl:editPreferenceRequest" name="editPreferenceRequest"/>
+
+         <wsdl:output message="impl:editPreferenceResponse" name="editPreferenceResponse"/>
+
+      </wsdl:operation>
+
     
     </wsdl:portType>
 
@@ -7782,6 +7952,44 @@
             </wsdl:input>
 
             <wsdl:output name="performWorkflowTransitionResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+     
+         <wsdl:operation name="readPreferences">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="readPreferencesRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="readPreferencesResponse">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:output>
+
+        </wsdl:operation>
+
+
+      <wsdl:operation name="editPreference">
+
+            <wsdlsoap:operation soapAction=""/>
+
+            <wsdl:input name="editPreferenceRequest">
+
+                <wsdlsoap:body use="literal"/>
+
+            </wsdl:input>
+
+            <wsdl:output name="editPreferenceResponse">
 
                 <wsdlsoap:body use="literal"/>
 
