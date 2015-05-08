@@ -1,5 +1,4 @@
 
-<?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:intf="http://www.hannonhill.com/ws/ns/AssetOperationService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
 <!--+
