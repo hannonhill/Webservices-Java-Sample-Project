@@ -25,7 +25,7 @@ It is recommended you set up your environment in the following manner:
 2. Ensue the "maven" executable is in your path. Type "mvn" on the command line if it's been correctly added to your path:
 
         $ mvn -v
-        Apache Maven 3.0.2 (r1056850; 2011-01-08 19:58:10-0500)
+        Apache Maven 3.0.2 (r1056850; 2016-01-08 19:58:10-0500)
         Java version: 1.6.0_24, vendor: Apple Inc.
         Java home: /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
         Default locale: en_US, platform encoding: MacRoman
@@ -54,7 +54,7 @@ Once Eclipse restarts:
 
 This will import and build the project in Eclipse.
 
-Once built, use Git to checkout the appropriate branch of this project for your Cascade installation. For example, if you're running Cascade version 6.8.3, checkout 6.8.x: `git checkout 6.8.x`
+Once built, use Git to checkout the appropriate branch of this project for your Cascade installation. For example, if you're running Cascade version 8.0.1, checkout 8.0.x: `git checkout 8.0.x`
 
 To update the generated Web Services stubs to correspond to your version of Cascade:
 
@@ -70,19 +70,19 @@ You should see a successful ant build similar to:
         [INFO] Scanning for projects...
         [INFO]                                                                         
         [INFO] ------------------------------------------------------------------------
-        [INFO] Building Cascade-Java-Web-Services-Example-Project 6.8.3
+        [INFO] Building Cascade-Java-Web-Services-Example-Project 8.0.1
         [INFO] ------------------------------------------------------------------------
         [INFO] 
         [INFO] --- axistools-maven-plugin:1.4:wsdl2java (default) @ Cascade-Java-Web-Services-Example-Project ---
         [INFO] about to add compile source root
         [INFO] Processing wsdl: /Users/bradley/cascade/Webservices-Java-Sample-Project/src/java/wsdl/asset-operation.wsdl
-        Jul 18, 2011 3:33:52 PM org.apache.axis.utils.JavaUtils isAttachmentSupported
+        Jul 18, 2016 3:33:52 PM org.apache.axis.utils.JavaUtils isAttachmentSupported
         WARNING: Unable to find required classes (javax.activation.DataHandler and javax.mail.internet.MimeMultipart). Attachment support is disabled.
         [INFO] ------------------------------------------------------------------------
         [INFO] BUILD SUCCESS
         [INFO] ------------------------------------------------------------------------
         [INFO] Total time: 3.940s
-        [INFO] Finished at: Mon Jul 18 15:33:55 EDT 2011
+        [INFO] Finished at: Mon Jul 18 15:33:55 EDT 2016
         [INFO] Final Memory: 3M/81M
         [INFO] ------------------------------------------------------------------------
         
@@ -99,7 +99,7 @@ Clone the project:
 
 1. Clone this repository: git clone git://github.com/hannonhill/Webservices-Java-Sample-Project.git
 2. Change into the directory for the newly created project
-3. Use Git to checkout the appropriate branch of this project for your Cascade installation. For example, if you're running Cascade version 6.8.3, checkout 6.8.x: `git checkout 6.8.x`
+3. Use Git to checkout the appropriate branch of this project for your Cascade installation. For example, if you're running Cascade version 8.0.1, checkout 8.0.x: `git checkout 8.0.x`
 
 Update the Web Services stubs:
 
@@ -114,19 +114,19 @@ You should see a successful ant build similar to:
         [INFO] Scanning for projects...
         [INFO]                                                                         
         [INFO] ------------------------------------------------------------------------
-        [INFO] Building Cascade-Java-Web-Services-Example-Project 6.8.3
+        [INFO] Building Cascade-Java-Web-Services-Example-Project 8.0.1
         [INFO] ------------------------------------------------------------------------
         [INFO] 
         [INFO] --- axistools-maven-plugin:1.4:wsdl2java (default) @ Cascade-Java-Web-Services-Example-Project ---
         [INFO] about to add compile source root
         [INFO] Processing wsdl: /Users/bradley/cascade/Webservices-Java-Sample-Project/src/java/wsdl/asset-operation.wsdl
-        Jul 18, 2011 3:33:52 PM org.apache.axis.utils.JavaUtils isAttachmentSupported
+        Jul 18, 2016 3:33:52 PM org.apache.axis.utils.JavaUtils isAttachmentSupported
         WARNING: Unable to find required classes (javax.activation.DataHandler and javax.mail.internet.MimeMultipart). Attachment support is disabled.
         [INFO] ------------------------------------------------------------------------
         [INFO] BUILD SUCCESS
         [INFO] ------------------------------------------------------------------------
         [INFO] Total time: 3.940s
-        [INFO] Finished at: Mon Jul 18 15:33:55 EDT 2011
+        [INFO] Finished at: Mon Jul 18 15:33:55 EDT 2016
         [INFO] Final Memory: 3M/81M
         [INFO] ------------------------------------------------------------------------
 
@@ -151,7 +151,7 @@ You should see something like:
         [INFO] Scanning for projects...
         [INFO]                                                                         
         [INFO] ------------------------------------------------------------------------
-        [INFO] Building Cascade-Java-Web-Services-Example-Project 6.8.3
+        [INFO] Building Cascade-Java-Web-Services-Example-Project 8.0.1
         [INFO] ------------------------------------------------------------------------
         [WARNING] The artifact axis:axis-jaxrpc:jar:1.4 has been relocated to org.apache.axis:axis-jaxrpc:jar:1.4
         [INFO] 
@@ -180,7 +180,7 @@ You should see something like:
          T E S T S
         -------------------------------------------------------
         Running com.cms.webservices.TestRead
-        Jul 18, 2011 5:37:31 PM org.apache.axis.utils.JavaUtils isAttachmentSupported
+        Jul 18, 2016 5:37:31 PM org.apache.axis.utils.JavaUtils isAttachmentSupported
         WARNING: Unable to find required classes (javax.activation.DataHandler and javax.mail.internet.MimeMultipart). Attachment support is disabled.
         Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.316 sec
 
@@ -192,6 +192,6 @@ You should see something like:
         [INFO] BUILD SUCCESS
         [INFO] ------------------------------------------------------------------------
         [INFO] Total time: 4.752s
-        [INFO] Finished at: Mon Jul 18 17:37:32 EDT 2011
+        [INFO] Finished at: Mon Jul 18 17:37:32 EDT 2016
         [INFO] Final Memory: 4M/81M
         [INFO] ------------------------------------------------------------------------
