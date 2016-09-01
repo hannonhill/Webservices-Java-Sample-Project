@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>Cascade-Java-Web-Services-Example-Project</groupId>
     <artifactId>Cascade-Java-Web-Services-Example-Project</artifactId>
-    <version>6.8.3</version>
+    <version>8.0</version>
 
     <dependencies>
         <dependency>
