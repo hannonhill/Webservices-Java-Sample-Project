@@ -58,7 +58,7 @@ Once built, use Git to checkout the appropriate branch of this project for your 
 
 To update the generated Web Services stubs to correspond to your version of Cascade:
 
-1. Open the WSDL from your Cascade Server instance by going to: http://<your-cascade-url>/ws/services/AssetOperationService?wsdl
+1. Open the WSDL from your Cascade Server instance by going to: http://your-cascade-url/ws/services/AssetOperationService?wsdl
 2. Save this as a file "asset-operation.wsdl".
 3. Replace the "asset-operation.wsdl" file in src/java/wsdl inside the eclipse project with your own file.
 4. In Eclipse, right-click the project and click Refresh. Maven should run and regenerate your stubs based on this updated WSDL file.
