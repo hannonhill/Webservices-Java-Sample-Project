@@ -2211,6 +2211,10 @@
 
                      <element maxOccurs="1" minOccurs="0" name="siteName" nillable="true" type="xsd:string"/>
 
+                     <element maxOccurs="1" minOccurs="0" name="reviewOnSchedule" nillable="true" type="xsd:boolean"/>
+
+                     <element maxOccurs="1" minOccurs="0" name="reviewEvery" nillable="true" type="xsd:nonNegativeInteger"/>
+
                   </sequence>
 
                </extension>
@@ -3904,6 +3908,11 @@
 
                      <element maxOccurs="1" minOccurs="0" name="authorFieldVisibility" type="impl:metadata-field-visibility"/>
 
+                     <!-- The help text for the author field
+   					  NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="authorFieldHelpText" type="xsd:string"/>
+
                      <!-- Whether or not the description field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
 
@@ -3913,6 +3922,11 @@
 							 NOT REQUIRED default "visible" -->
 
                      <element maxOccurs="1" minOccurs="0" name="descriptionFieldVisibility" type="impl:metadata-field-visibility"/>
+
+                     <!-- The help text for the description field
+   						 NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="descriptionFieldHelpText" type="xsd:string"/>
 
                      <!-- Whether or not the display name field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
@@ -3924,6 +3938,11 @@
 
                      <element maxOccurs="1" minOccurs="0" name="displayNameFieldVisibility" type="impl:metadata-field-visibility"/>
 
+                     <!-- The help text for the display name field
+   						NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="displayNameFieldHelpText" type="xsd:string"/>
+
                      <!-- Whether or not the end date field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
 
@@ -3933,6 +3952,11 @@
 							 NOT REQUIRED default "visible" -->
 
                      <element maxOccurs="1" minOccurs="0" name="endDateFieldVisibility" type="impl:metadata-field-visibility"/>
+
+                     <!-- The help text for the end date field
+   						 NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="endDateFieldHelpText" type="xsd:string"/>
 
                      <!-- Whether or not the expiration folder field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
@@ -3944,6 +3968,11 @@
 
                      <element maxOccurs="1" minOccurs="0" name="expirationFolderFieldVisibility" type="impl:metadata-field-visibility"/>
 
+                     <!-- The help text for the expiration folder field
+   						NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="expirationFolderFieldHelpText" type="xsd:string"/>
+
                      <!-- Whether or not the keywords field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
 
@@ -3953,6 +3982,11 @@
 							 NOT REQUIRED default "visible" -->
 
                      <element maxOccurs="1" minOccurs="0" name="keywordsFieldVisibility" type="impl:metadata-field-visibility"/>
+
+                     <!-- The help text for the keywords field
+   						 NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="keywordsFieldHelpText" type="xsd:string"/>
 
                      <!-- Whether or not the review date field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
@@ -3964,6 +3998,11 @@
 
                      <element maxOccurs="1" minOccurs="0" name="reviewDateFieldVisibility" type="impl:metadata-field-visibility"/>
 
+                     <!-- The help text for the review date field
+  					   NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="reviewDateFieldHelpText" type="xsd:string"/>
+
                      <!-- Whether or not the start date field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
 
@@ -3973,6 +4012,11 @@
 							 NOT REQUIRED default "visible" -->
 
                      <element maxOccurs="1" minOccurs="0" name="startDateFieldVisibility" type="impl:metadata-field-visibility"/>
+
+                     <!-- The help text for the start date field
+   					  NOT REQUIRED  -->
+
+                     <element maxOccurs="1" minOccurs="0" name="startDateFieldHelpText" type="xsd:string"/>
 
                      <!-- Whether or not the summary field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
@@ -3984,6 +4028,11 @@
 
                      <element maxOccurs="1" minOccurs="0" name="summaryFieldVisibility" type="impl:metadata-field-visibility"/>
 
+                     <!-- the help text for the summary field
+   						NOT REQUIRED -->
+
+                     <element maxOccurs="1" minOccurs="0" name="summaryFieldHelpText" type="xsd:string"/>
+
                      <!-- Whether or not the teaser field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
 
@@ -3994,6 +4043,11 @@
 
                      <element maxOccurs="1" minOccurs="0" name="teaserFieldVisibility" type="impl:metadata-field-visibility"/>
 
+                     <!-- the help text for the teaser field
+   						 NOT REQUIRED -->
+
+                     <element maxOccurs="1" minOccurs="0" name="teaserFieldHelpText" type="xsd:string"/>
+
                      <!-- Whether or not the title field is required on assets using this metadata set
 							 NOT REQUIRED default false -->
 
@@ -4003,6 +4057,11 @@
 							 NOT REQUIRED default "visible" -->
 
                      <element maxOccurs="1" minOccurs="0" name="titleFieldVisibility" type="impl:metadata-field-visibility"/>
+
+                     <!-- the help text for the title field
+							 NOT REQUIRED -->
+
+                     <element maxOccurs="1" minOccurs="0" name="titleFieldHelpText" type="xsd:string"/>
 
                      <!-- The dynamic metadata field definitions -->
 
@@ -4065,6 +4124,11 @@
 					 NOT REQUIRED and ignored for text type -->
 
                <element maxOccurs="1" minOccurs="0" name="possibleValues" type="impl:dynamic-metadata-field-definition-values"/>
+
+               <!-- the help text for this field
+  NOT REQUIRED -->
+
+               <element maxOccurs="1" minOccurs="0" name="helpText" type="xsd:string"/>
 
             </sequence>
 
@@ -6028,6 +6092,8 @@
                      <!-- the array of children -->
 
                      <element maxOccurs="1" minOccurs="0" name="children" nillable="true" type="impl:container-children"/>
+
+                     <element maxOccurs="1" minOccurs="0" name="includeInStaleContent" nillable="true" type="xsd:boolean"/>
 
                   </sequence>
 
