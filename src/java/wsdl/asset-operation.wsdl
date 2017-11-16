@@ -1199,8 +1199,6 @@
                One is REQUIRED -->
             <element name="siteId" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:string"/>
             <element name="siteName" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:string"/>
-            <element name="reviewOnSchedule" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:boolean"/>
-            <element name="reviewEvery" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:nonNegativeInteger"/>
           </sequence>
         </extension>
       </complexContent>
@@ -1691,6 +1689,17 @@
             <element name="spellCheckEnabled" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
             <element name="linkCheckEnabled" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
             <element name="accessibilityCheckEnabled" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+            <!-- REQUIRED Determines whether naming rules are inherited from the system preferences.
+                  If true, the rule properties will be ignored when saving, but old values are preserved.
+                  Otherwise, null values will be defaulted to appropriate values when saving.
+                  Naming rules read from a site may be null. -->
+            <element name="inheritNamingRules" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+            <!-- Depending on inheritNamingRules, this is Optional. Defines what case a name can be. -->
+            <element name="namingRuleCase" minOccurs="0" maxOccurs="1" nillable="true" type="impl:namingRuleCase"/>
+            <!-- Depending on inheritNamingRules, this is Optional. Defines how spaces are handled for names -->
+            <element name="namingRuleSpacing" minOccurs="0" maxOccurs="1" nillable="true" type="impl:namingRuleSpacing"/>
+            <!-- Depending on inheritNamingRules, this is Optional. Defines the asset types that enforce naming rules -->
+            <element name="namingRuleAssets" minOccurs="0" maxOccurs="1" nillable="true" type="impl:namingRuleAssets"/>
             <!-- The root folder id and containers idds - used only when reading a site. Unused in other cases
                  NOT REQUIRED ignored -->
             <element name="rootFolderId" minOccurs="0" maxOccurs="1" type="xsd:string" nillable="true"/>
@@ -1708,6 +1717,42 @@
         </extension>
       </complexContent>
     </complexType>
+
+    <simpleType name="namingRuleCase">
+      <restriction base="xsd:string">
+        <enumeration value="ANY"/>
+        <enumeration value="LOWER"/>
+        <enumeration value="UPPER"/>
+      </restriction>
+    </simpleType>
+
+    <simpleType name="namingRuleSpacing">
+      <restriction base="xsd:string">
+        <enumeration value="SPACE"/>
+        <enumeration value="REMOVE"/>
+        <enumeration value="HYPHEN"/>
+        <enumeration value="UNDERSCORE"/>
+      </restriction>
+    </simpleType>
+
+    <complexType name="namingRuleAssets">
+      <sequence>
+        <element name="namingRuleAsset" minOccurs="0" maxOccurs="unbounded" type="impl:namingRuleAsset"/>
+      </sequence>
+    </complexType>
+
+    <simpleType name="namingRuleAsset">
+      <restriction base="xsd:string">
+        <enumeration value="block"/>
+        <enumeration value="file"/>
+        <enumeration value="folder"/>
+        <enumeration value="page"/>
+        <enumeration value="symlink"/>
+        <enumeration value="template"/>
+        <enumeration value="reference"/>
+        <enumeration value="format"/>
+      </restriction>
+    </simpleType>
 
     <simpleType name="recycleBinExpiration">
       <restriction base="xsd:string">
@@ -2944,6 +2989,9 @@
             <!-- Whether or not this is an edit type workflow
                NOT REQUIRED default: false -->
             <element name="edit" maxOccurs="1" minOccurs="0" type="xsd:boolean"/>
+            <!-- Whether or not this is a move type workflow
+               NOT REQUIRED default: false -->
+            <element name="move" maxOccurs="1" minOccurs="0" type="xsd:boolean"/>
             <!-- The naming behavior when an instance of this workflow is created
                REQUIRED -->
             <element name="namingBehavior" maxOccurs="1" minOccurs="1" type="impl:workflowNamingBehavior"/>
@@ -2990,6 +3038,8 @@
                NOT REQUIRED -->
             <element name="metadataSetId" type="xsd:string" maxOccurs="1" minOccurs="0"/>
             <element name="metadataSetPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+            <element name="reviewOnSchedule" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:boolean"/>
+            <element name="reviewEvery" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:nonNegativeInteger"/>
           </sequence>
         </extension>
       </complexContent>
