@@ -1411,6 +1411,8 @@
         <element name="changeIdentity" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
         <!-- NOT REQUIRED - default false -->
         <element name="accessDefaultEditorConfiguration" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
+        <!-- NOT REQUIRED - default false -->
+        <element name="modifyDictionary" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
       </sequence>
     </complexType>
 
@@ -1600,6 +1602,9 @@
           <sequence>
             <!-- The site url REQUIRED-->
             <element name="url" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+
+            <!-- The SiteImprove url to use when sending url data to SiteImprove. NOT REQUIRED -->
+            <element name="siteImproveUrl" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 
             <!-- A comma separated list of extensions that should be stripped from cross-site links pointing to assets in this site.
                NOT REQUIRED default: empty -->
