@@ -991,6 +991,7 @@
         <extension base="impl:operationResult">
           <sequence>
             <element name="subscribers" minOccurs="1" maxOccurs="1" type="impl:assetIdentifiers"/>
+            <element name="manualSubscribers" minOccurs="1" maxOccurs="1" type="impl:assetIdentifiers"/>
           </sequence>
         </extension>
       </complexContent>
@@ -1199,9 +1200,24 @@
                One is REQUIRED -->
             <element name="siteId" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:string"/>
             <element name="siteName" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:string"/>
+            <!-- Content Tags assigned to the asset
+              NOT REQUIRED -->
+            <element name="tags" maxOccurs="1" minOccurs="0" nillable="true" type="impl:tags"/>
           </sequence>
         </extension>
       </complexContent>
+    </complexType>
+
+    <complexType name="tags">
+      <sequence>
+        <element name="tag" minOccurs="0" maxOccurs="unbounded" nillable="true" type="impl:tag"/>
+      </sequence>
+    </complexType>
+
+    <complexType name="tag">
+      <sequence>
+        <element name="name" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:string"/>
+      </sequence>
     </complexType>
 
     <!-- The following concrete types extend folder-contained-asset -->
@@ -1948,6 +1964,11 @@
                NOT REQUIRED -->
             <element name="editorConfigurationId" minOccurs="0" maxOccurs="1" type="xsd:string"/>
             <element name="editorConfigurationPath" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+
+            <!-- Priority: publishSetId > publishSetPath
+              NOT REQUIRED -->
+            <element name="publishSetId" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+            <element name="publishSetPath" minOccurs="0" maxOccurs="1" type="xsd:string"/>
 
             <!-- The array of contentTypePageConfigurations
                NOT REQUIRED - if not specified, the default publish mode "all-destinations" is used for each pageConfiguration
@@ -3205,6 +3226,9 @@
             <!-- Whether or not to include access rights information
                NOT REQUIRED default: false -->
             <element name="indexAccessRights" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
+            <!-- Whether or not to include tags
+               NOT REQUIRED default: false -->
+            <element name="indexTags" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
             <!-- When this is "true", an element "user-information" will be added towards the
                bottom of the rendered XML including information about the user's login, full
                name and group memberships
@@ -3753,6 +3777,8 @@
 
         <!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
         <element name="unpublish"  minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
+        <element name="publishRelatedAssets" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
+        <element name="publishRelatedPublishSet" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
       </sequence>
     </complexType>
 
