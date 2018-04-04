@@ -57,12 +57,12 @@ public class TestEdit
         AssetOperationHandlerServiceLocator serviceLocator = new AssetOperationHandlerServiceLocator();
         AssetOperationHandler handler = serviceLocator.getAssetOperationService();
         ReadResult result = handler.read(authentication, toRead);
-        assertTrue("Read was not successful: " + result.getMessage(), result.getSuccess().equals("true") ? true : false);
+        assertTrue("Read was not successful please check: " + result.getMessage(), result.getSuccess().equals("true") ? true : false);
 
         // edit the title
         Asset readAsset = result.getAsset();
         Page page = readAsset.getPage();
-        page.getMetadata().setTitle("new title");
+        page.getMetadata().setTitle("NEW TITLE NAME");
 
         OperationResult editResult = handler.edit(authentication, readAsset);
         assertTrue("Edit was not successful: " + result.getMessage(), editResult.getSuccess().equals("true") ? true : false);
@@ -70,6 +70,6 @@ public class TestEdit
         // re-read to verify title change
         result = handler.read(authentication, toRead);
         assertTrue("Read was not successful: " + result.getMessage(), result.getSuccess().equals("true") ? true : false);
-        assertEquals("Title was not changed", "new title", result.getAsset().getPage().getMetadata().getTitle());
+        assertEquals("Title was not changed", "NEW TITLE", result.getAsset().getPage().getMetadata().getTitle());
     }
 }
