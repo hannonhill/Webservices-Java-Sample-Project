@@ -40,6 +40,10 @@
           <sequence>
             <element name="authentication" type="impl:authentication"/>
             <element name="identifier" type="impl:identifier"/>
+            <!--  NOT REQUIRED: parameters for asset deletion -->
+            <element name="deleteParameters" minOccurs="0" maxOccurs="1" nillable="false" type="impl:deleteParameters"/>
+            <!--  NOT REQUIRED: workflow configuration to be used when deleting. -->
+            <element name="workflowConfiguration" minOccurs="0" maxOccurs="1" nillable="false" type="impl:workflow-configuration"/>
           </sequence>
         </complexType>
       </element>
@@ -87,7 +91,7 @@
             <element name="identifier" maxOccurs="1" minOccurs="1" nillable="false" type="impl:identifier"/>
             <!--  REQUIRED: parameters specifying a new name and/or container for the asset -->
             <element name="moveParameters" minOccurs="1" maxOccurs="1" nillable="false" type="impl:moveParameters"/>
-            <!--  NOT REQUIRED: workflow configuration to be used when moving -->
+            <!--  NOT REQUIRED: workflow configuration to be used when moving. -->
             <element name="workflowConfiguration" maxOccurs="1" minOccurs="0" nillable="false" type="impl:workflow-configuration"/>
           </sequence>
         </complexType>
@@ -517,8 +521,10 @@
 
       <complexType name="authentication">
         <sequence>
-          <element name="password" nillable="false" type="xsd:string"/>
-          <element name="username" nillable="false" type="xsd:string"/>
+          <!-- Unless an apiKey is provided, both username and password are REQUIRED. -->
+          <element name="password" minOccurs="0" nillable="false" type="xsd:string"/>
+          <element name="username" minOccurs="0" nillable="false" type="xsd:string"/>
+          <element name="apiKey" minOccurs="0" nillable="false" type="xsd:string"/>
         </sequence>
       </complexType>
 
@@ -653,14 +659,39 @@
 
       <!-- Parameters used when moving an asset -->
       <complexType name="moveParameters">
+        <complexContent>
+          <extension base="impl:unpublish-parameters">
+            <sequence>
+              <!--  NOT REQUIRED: the container into which the asset will be moved
+                if left empty, asset will remain in its current container -->
+              <element name="destinationContainerIdentifier" minOccurs="0" maxOccurs="1" type="impl:identifier"/>
+              <element name="doWorkflow" minOccurs="1" maxOccurs="1" nillable="false" type="xsd:boolean"/>
+              <!--  NOT REQUIRED: name to give the asset
+                if left empty asset's name will not be changed  -->
+              <element name="newName" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+
+      <!-- Parameters used when deleting an asset -->
+      <complexType name="deleteParameters">
+        <complexContent>
+          <extension base="impl:unpublish-parameters">
+            <sequence>
+              <element name="doWorkflow" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+
+      <!-- Parameters used when unpublishing an asset -->
+      <complexType name="unpublish-parameters">
         <sequence>
-          <!--  NOT REQUIRED: the container into which the asset will be moved
-					  if left empty, asset will remain in its current container -->
-          <element name="destinationContainerIdentifier" minOccurs="0" maxOccurs="1" type="impl:identifier"/>
-          <element name="doWorkflow" minOccurs="1" maxOccurs="1" nillable="false" type="xsd:boolean"/>
-          <!--  NOT REQUIRED: name to give the asset
-					  if left empty asset's name will not be changed  -->
-          <element name="newName" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+          <!-- NOT REQUIRED: when true, the asset will be unpublished. Default: false -->
+          <element name="unpublish" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
+          <!-- NOT REQUIRED: unpublishes the asset from the given destinations. Default: all enabled destinations in the asset's site -->
+          <element name="destinations" minOccurs="0" maxOccurs="1" nillable="true" type="impl:assetIdentifiers"/>
         </sequence>
       </complexType>
 
@@ -774,7 +805,7 @@
           <enumeration value="block_TEXT"/>
           <enumeration value="block_XHTML_DATADEFINITION"/>
           <enumeration value="block_XML"/>
-          <enumeration value="block_TWITTER_FEED" />
+          <enumeration value="block_TWITTER_FEED"/>
           <enumeration value="connectorcontainer"/>
           <enumeration value="twitterconnector"/>
           <enumeration value="facebookconnector"/>
@@ -1095,12 +1126,12 @@
               <element name="endDate" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:dateTime"/>
               <!-- Custom workflow email to send when email trigger set to completed
 NOT REQUIRED -->
-              <element name="completedWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="completedWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string" />
+              <element name="completedWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="completedWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
               <!-- Custom workflow email to send when email trigger set to notify
 							NOT REQUIRED -->
-              <element name="notificationWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="notificationWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string" />
+              <element name="notificationWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="notificationWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
             </sequence>
           </extension>
         </complexContent>
@@ -1639,7 +1670,7 @@ NOT REQUIRED -->
 
               <!-- A comma separated list of extensions that should be stripped from cross-site links pointing to assets in this site.
     				   NOT REQUIRED default: empty -->
-              <element name="extensionsToStrip" maxOccurs="1" minOccurs="0" type="xsd:string" nillable="true" />
+              <element name="extensionsToStrip" maxOccurs="1" minOccurs="0" type="xsd:string" nillable="true"/>
 
               <!-- The default metadata set for the site
 							 Priority: defaultMetadataSetId > defaultMetadataSetPath
@@ -1763,6 +1794,9 @@ NOT REQUIRED -->
               <element name="rootTransportContainerId" minOccurs="0" maxOccurs="1" type="xsd:string" nillable="true"/>
               <element name="rootWorkflowDefinitionContainerId" minOccurs="0" maxOccurs="1" type="xsd:string" nillable="true"/>
               <element name="rootWorkflowEmailContainerId" minOccurs="0" maxOccurs="1" type="xsd:string" nillable="true"/>
+
+              <!-- NOT REQUIRED, default: "absolute" -->
+              <element name="linkRewriting" minOccurs="0" maxOccurs="1" type="impl:siteLinkRewriting"/>
             </sequence>
           </extension>
         </complexContent>
@@ -2790,11 +2824,11 @@ NOT REQUIRED -->
 
               <!-- The base URL which should be used for linking to a given configuration during publishing, when this destination
 							 is explicity chosen for a configuration on the content type. -->
-              <element name="webUrl" maxOccurs="1" minOccurs="0" type="xsd:string" nillable="true" />
+              <element name="webUrl" maxOccurs="1" minOccurs="0" type="xsd:string" nillable="true"/>
 
               <!-- A comma separated list of extensions that should be stripped from links pointing to assets published to this destination.
 						 	 NOT REQUIRED default: empty -->
-              <element name="extensionsToStrip" maxOccurs="1" minOccurs="0" type="xsd:string" nillable="true" />
+              <element name="extensionsToStrip" maxOccurs="1" minOccurs="0" type="xsd:string" nillable="true"/>
 
               <!-- The site
 							 Priority: siteId > siteName
@@ -2981,7 +3015,7 @@ NOT REQUIRED -->
         </complexContent>
       </complexType>
 
-      <complexType name="statusUpdateConnector" >
+      <complexType name="statusUpdateConnector">
         <complexContent>
           <extension base="impl:connector">
             <sequence>
@@ -2997,25 +3031,25 @@ NOT REQUIRED -->
 
       <complexType name="wordPressConnector">
         <complexContent>
-          <extension base="impl:connector" />
+          <extension base="impl:connector"/>
         </complexContent>
       </complexType>
 
       <complexType name="twitterConnector">
         <complexContent>
-          <extension base="impl:statusUpdateConnector" />
+          <extension base="impl:statusUpdateConnector"/>
         </complexContent>
       </complexType>
 
       <complexType name="facebookConnector">
         <complexContent>
-          <extension base="impl:statusUpdateConnector" />
+          <extension base="impl:statusUpdateConnector"/>
         </complexContent>
       </complexType>
 
       <complexType name="googleAnalyticsConnector">
         <complexContent>
-          <extension base="impl:connector" />
+          <extension base="impl:connector"/>
         </complexContent>
       </complexType>
 
@@ -3064,7 +3098,8 @@ NOT REQUIRED -->
 
       <complexType name="connector-content-type-link-param-list">
         <sequence>
-          <element name="connectorContentTypeLinkParam" maxOccurs="unbounded" minOccurs="0" nillable="true" type="impl:connector-content-type-link-param"/>
+          <element name="connectorContentTypeLinkParam" maxOccurs="unbounded" minOccurs="0" nillable="true"
+                   type="impl:connector-content-type-link-param"/>
         </sequence>
       </complexType>
 
@@ -3109,13 +3144,13 @@ NOT REQUIRED -->
               <element name="xml" maxOccurs="1" minOccurs="1" type="xsd:string"/>
               <!-- Custom workflow email to send when email trigger set to completed
 							NOT REQUIRED -->
-              <element name="completedWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="completedWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string" />
+              <element name="completedWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="completedWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
 
               <!-- Custom workflow email to send when email trigger set to notify
 							NOT REQUIRED -->
-              <element name="notificationWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="notificationWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string" />
+              <element name="notificationWorkflowEmailId" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="notificationWorkflowEmailPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
             </sequence>
           </extension>
         </complexContent>
@@ -3154,7 +3189,7 @@ NOT REQUIRED -->
               <!-- For defining the metadata set relationship
 							 Priority: metadataSetId > metadataSetPath
 							 NOT REQUIRED -->
-              <element name="metadataSetId" type="xsd:string"	maxOccurs="1" minOccurs="0"/>
+              <element name="metadataSetId" type="xsd:string" maxOccurs="1" minOccurs="0"/>
               <element name="metadataSetPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
               <element name="reviewOnSchedule" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:boolean"/>
               <element name="reviewEvery" maxOccurs="1" minOccurs="0" nillable="true" type="xsd:nonNegativeInteger"/>
@@ -3476,9 +3511,9 @@ NOT REQUIRED -->
 
       <simpleType name="twitter-query-type">
         <restriction base="xsd:string">
-          <enumeration value="user-only" />
-          <enumeration value="users-and-mentions" />
-          <enumeration value="search-terms" />
+          <enumeration value="user-only"/>
+          <enumeration value="users-and-mentions"/>
+          <enumeration value="search-terms"/>
         </restriction>
       </simpleType>
 
@@ -3515,10 +3550,10 @@ NOT REQUIRED -->
               <!-- For defining the configuration set or content type relationship.
 							 Priority: (contentTypeId > contentTypePath) > (configurationSetId > configurationSetPath)
 							 One is REQUIRED -->
-              <element name="configurationSetId" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="configurationSetPath" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="contentTypeId" maxOccurs="1" minOccurs="0" type="xsd:string" />
-              <element name="contentTypePath" maxOccurs="1" minOccurs="0" type="xsd:string" />
+              <element name="configurationSetId" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="configurationSetPath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="contentTypeId" maxOccurs="1" minOccurs="0" type="xsd:string"/>
+              <element name="contentTypePath" maxOccurs="1" minOccurs="0" type="xsd:string"/>
 
               <!-- A page either contains XHTML content (plain WYSIWYG page) or structured data content
 							 Proprity: xhtml > structuredData
@@ -3531,12 +3566,29 @@ NOT REQUIRED -->
 							 if you want to maintain the region assignments -->
               <element name="pageConfigurations" minOccurs="0" maxOccurs="1" nillable="false" type="impl:page-configurations"/>
 
-              <!-- NOT REQUIRED, default: false -->
-              <element name="maintainAbsoluteLinks" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
+              <!-- NOT REQUIRED, default: "inherit" -->
+              <element name="linkRewriting" minOccurs="0" maxOccurs="1" type="impl:linkRewriting"/>
             </sequence>
           </extension>
         </complexContent>
       </complexType>
+
+      <simpleType name="linkRewriting">
+        <restriction base="xsd:string">
+          <enumeration value="inherit"/>
+          <enumeration value="absolute"/>
+          <enumeration value="relative"/>
+          <enumeration value="site-relative"/>
+        </restriction>
+      </simpleType>
+
+      <simpleType name="siteLinkRewriting">
+        <restriction base="xsd:string">
+          <enumeration value="absolute"/>
+          <enumeration value="relative"/>
+          <enumeration value="site-relative"/>
+        </restriction>
+      </simpleType>
 
       <!-- page structured data information -->
       <complexType name="structured-data">
@@ -3679,7 +3731,9 @@ NOT REQUIRED -->
               <element name="data" minOccurs="0" maxOccurs="1" type="xsd:base64Binary"/>
 
               <element name="rewriteLinks" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
-              <element name="maintainAbsoluteLinks" minOccurs="0" maxOccurs="1" type="xsd:boolean"/>
+
+              <!-- NOT REQUIRED, default: "inherit" -->
+              <element name="linkRewriting" minOccurs="0" maxOccurs="1" type="impl:linkRewriting"/>
             </sequence>
           </extension>
         </complexContent>
@@ -3838,6 +3892,7 @@ NOT REQUIRED -->
         <sequence>
           <element name="workflowConfiguration" minOccurs="0" maxOccurs="1" type="impl:workflow-configuration"/>
           <element name="identifier" minOccurs="1" maxOccurs="1" type="impl:identifier"/>
+          <element name="deleteParameters" minOccurs="0" maxOccurs="1" type="impl:deleteParameters"/>
         </sequence>
       </complexType>
 
@@ -3873,7 +3928,7 @@ NOT REQUIRED -->
           <element name="destinations" minOccurs="0" maxOccurs="1" nillable="false" type="impl:assetIdentifiers"/>
 
           <!-- Similar to the GUI - you can choose to unpublish the asset instead of publishing it. Not required. Default: false -->
-          <element name="unpublish"  minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
+          <element name="unpublish" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
           <element name="publishRelatedAssets" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
           <element name="publishRelatedPublishSet" minOccurs="0" maxOccurs="1" nillable="true" type="xsd:boolean"/>
         </sequence>
